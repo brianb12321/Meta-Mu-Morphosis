@@ -1,6 +1,6 @@
 import { Container } from "container-ioc";
 import { ConsoleLogger } from "./core/logging/ConsoleLogger";
-import { DefaultApplication } from "./core/boostrapper/DefaultApplication";
+import { DefaultApplication } from "./core/bootstrapper/DefaultApplication";
 import { IndexPage } from "./pages/indexPage";
 import { TNavBar, TPageNavigator, TThemeManager } from "./core/globalSymbols";
 import { DefaultThemeManager } from "./core/render/theme/DefaultThemeManager";

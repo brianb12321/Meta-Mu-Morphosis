@@ -7,7 +7,7 @@ module.exports = {
         all: './src/main.ts'
     },
     output: {
-        filename: 'musicly-[name]-bundle.min.js',
+        filename: 'MMM-[name]-bundle.min.js',
         path: path.resolve(__dirname, 'dist')
     }
 };
