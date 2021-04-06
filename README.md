@@ -7,10 +7,14 @@ Meta-mu-morphosis is a fully client-side music and playlist manager.
 ## Building
 If you modified MMM or wish to manually build, follow the following steps:
 1. Download all necessary packages from NPM:
-	npm install
+```
+npm install
+```
 2. Run the build-script.
-	::For Windows, run:
-	npm run build
-	#For Linux, run:
-	npm run build-sh
+```
+::For Windows, run:
+npm run build
+#For Linux, run:
+npm run build-sh
+```
 3. Webpack will generate a `MMM-all-bundle.min.js` file in the dist folder. Reference the JS file in `index.html`.
