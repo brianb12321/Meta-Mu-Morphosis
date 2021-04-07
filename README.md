@@ -1,4 +1,4 @@
-# Meta-mu-morphosis
+# MetaMuMorph
 MuMetaMorph is a fully client-side music and playlist manager.
 ## Where did you get its name?
 * Mu - A play-on-word for music.
