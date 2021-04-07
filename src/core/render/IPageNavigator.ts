@@ -5,6 +5,8 @@ import { IPageBody } from "./IPageBody";
 export interface IPageNavigator {
 	navigationBar: INavBar;
 	currentPageBody: IPageBody;
-    navigate(bodyName: string, renderBody: HTMLElement): Promise<void>;
-	refreshNavBar(renderBody: HTMLElement): Promise<void>;
+	navigationRenderBody: HTMLElement;
+	pageBodyRenderBody: HTMLElement;
+    navigate(bodyName: string): Promise<void>;
+	refreshNavBar(): Promise<void>;
 }

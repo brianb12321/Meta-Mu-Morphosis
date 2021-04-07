@@ -1,15 +1,15 @@
-{   
-    "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES2015",
-        "lib": [ "ES2015", "DOM" ],
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "sourceMap": true
-    },
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2016",
+    "lib": [ "ES2016", "DOM" ],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
     "include": [
         "src/**/*"
     ],
