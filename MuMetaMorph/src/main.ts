@@ -7,12 +7,12 @@ import { DefaultThemeManager } from "./core/render/theme/DefaultThemeManager";
 import { PageNavigator } from "./core/render/PageNavigator";
 import { NavBar } from "./pages/NavBar";
 import { MusicPage } from "./pages/MusicPage";
-import { LocalStorageConfigurationManager } from "./core/configuration/LocalStorageConfigurationManager";
+import { IndexDbConfigurationManager } from "./core/configuration/indexDb/IndexDbConfigurationManager";
 
 const logger = new ConsoleLogger();
 const application = new DefaultApplication()
     .addLogger(logger)
-    .addConfigurationManager(() => new LocalStorageConfigurationManager(logger))
+    .addConfigurationManager(() => new IndexDbConfigurationManager(logger))
     .configureContainer(() => {
         let container = new Container();
         container.register([
@@ -20,7 +20,7 @@ const application = new DefaultApplication()
             { token: TNavBar, useClass: NavBar },
             { token: TPageNavigator, useClass: PageNavigator },
             { token: "IPageBody-Home", useClass: IndexPage, lifeTime: LifeTime.PerRequest },
-            { token: "IPageBody-Music", useClass: MusicPage, lifeTime: LifeTime.PerRequest }
+            { token: "IPageBody-Music", useClass: MusicPage, lifeTime: LifeTime.PerRequest },
         ]);
         return container;
     });

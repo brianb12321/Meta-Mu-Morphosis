@@ -1,12 +1,12 @@
 import { Injectable, Inject, Container } from "container-ioc";
-import { TLogger, TConfigurationManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
+import { TLogger, TConfigManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
 import { IApplication } from "./IApplication";
 import { ILogger } from "../logging/ILogger";
 import { IPageNavigator } from "../render/IPageNavigator";
 import { INavBar } from "../render/INavBar";
 import { IConfigurationManager } from "../configuration/IConfigurationManager";
-import { LocalStorageConfigurationManager } from "../configuration/LocalStorageConfigurationManager";
 import GlobalSymbols = require("../globalSymbols");
+import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
 
 @Injectable()
 export class DefaultApplication implements IApplication {
@@ -27,7 +27,7 @@ export class DefaultApplication implements IApplication {
         //We are going to attempt to add a logger and configuration manager to the container
         this.container.register([
             { token: TLogger, useValue: this.logger },
-            { token: TConfigurationManager, useValue: this.configurationManager }
+            { token: TConfigManager, useValue: this.configurationManager }
         ]);
         return this;
     }
@@ -39,7 +39,7 @@ export class DefaultApplication implements IApplication {
         if (configBuilder != null) {
             this.configurationManager = configBuilder();
         } else {
-            this.configurationManager = new LocalStorageConfigurationManager(this.logger);
+            this.configurationManager = new IndexDbConfigurationManager(this.logger);
         }
         
         return this;

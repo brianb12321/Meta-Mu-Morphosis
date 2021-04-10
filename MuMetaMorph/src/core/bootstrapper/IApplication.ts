@@ -1,4 +1,3 @@
-import { IConfigurationManager } from "../configuration/IConfigurationManager";
 import { ILogger } from "../logging/ILogger";
 
 export interface IApplication {
