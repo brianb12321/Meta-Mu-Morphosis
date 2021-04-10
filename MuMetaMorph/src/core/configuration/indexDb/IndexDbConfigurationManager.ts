@@ -1,4 +1,4 @@
-﻿import { Inject, Injectable } from "container-ioc";
+﻿import { inject, injectable } from "tsyringe";
 import { TLogger } from "../../globalSymbols";
 import { ILogger } from "../../logging/ILogger";
 import { ConfigurationObject } from "../ConfigurationObject";
@@ -6,10 +6,10 @@ import { IConfiguration } from "../IConfiguration";
 import { IConfigurationManager } from "../IConfigurationManager";
 import { MMMConfigurationDatabase } from "./MMMConfigurationDatabase";
 
-@Injectable()
+@injectable()
 export class IndexDbConfigurationManager implements IConfigurationManager {
     private database: MMMConfigurationDatabase;
-    constructor(@Inject(TLogger) private logger: ILogger) {
+    constructor(@inject(TLogger) private logger: ILogger) {
         this.database = new MMMConfigurationDatabase(logger);
     }
     async getConfiguration<TConfObj extends IConfiguration>(name: string): Promise<TConfObj> {

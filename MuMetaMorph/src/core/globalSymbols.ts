@@ -6,3 +6,4 @@ export const TNavBar = Symbol("INavBar");
 export const TPageNavigator = Symbol("IPageNavigator");
 export const TDatabase = Symbol("IDatabase");
 export const TConfigManager = Symbol("IConfigurationManager");
+export const TStartupItem = Symbol("IStartupItem");

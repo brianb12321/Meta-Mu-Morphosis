@@ -1,7 +1,7 @@
-import { Injectable } from "container-ioc";
+import { injectable } from "tsyringe";
 import { ILogger } from "./ILogger";
 
-@Injectable()
+@injectable()
 export class ConsoleLogger implements ILogger {
     log(logItem: any): void {
         console.log(logItem);

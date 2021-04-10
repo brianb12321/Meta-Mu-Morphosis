@@ -1,16 +1,17 @@
-import { Inject, Injectable } from "container-ioc";
+import { inject, injectable } from "tsyringe";
 import { IConfigurationManager } from "../../configuration/IConfigurationManager";
 import { TConfigManager, TLogger } from "../../globalSymbols";
 import { ILogger } from "../../logging/ILogger";
 import { ITheme } from "./ITheme";
 import { IThemeConfiguration } from "./IThemeConfiguration";
+import { IThemeManager } from "./IThemeManager";
 
-@Injectable()
+@injectable()
 export class DefaultThemeManager implements IThemeManager {
     THEME_CONFIG_NAME = "Theme";
     private themeConfig: IThemeConfiguration;
     private defaultTheme: ITheme;
-    constructor(@Inject(TConfigManager) private configManager: IConfigurationManager, @Inject(TLogger) private logger: ILogger) {
+    constructor(@inject(TConfigManager) private configManager: IConfigurationManager, @inject(TLogger) private logger: ILogger) {
 
     }
     async initialize(): Promise<void> {

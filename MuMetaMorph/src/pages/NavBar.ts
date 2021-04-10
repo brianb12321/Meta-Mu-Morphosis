@@ -1,11 +1,11 @@
-import { Inject, Injectable } from "container-ioc";
+import { inject, injectable } from "tsyringe";
 import { TPageNavigator } from "../core/globalSymbols";
 import { INavBar } from "../core/render/INavBar";
 import { IPageNavigator } from "../core/render/IPageNavigator";
 
-@Injectable()
+@injectable()
 export class NavBar implements INavBar {
-    constructor(@Inject(TPageNavigator) private pageNavigator: IPageNavigator) {
+    constructor(@inject(TPageNavigator) private pageNavigator: IPageNavigator) {
 
     }
 

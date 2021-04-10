@@ -5,6 +5,7 @@
     "lib": [ "ES2016", "DOM" ],
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,

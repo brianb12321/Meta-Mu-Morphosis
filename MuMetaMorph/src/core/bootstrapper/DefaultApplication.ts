@@ -1,4 +1,4 @@
-import { Injectable, Inject, Container } from "container-ioc";
+import { container, injectable } from "tsyringe"
 import { TLogger, TConfigManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
 import { IApplication } from "./IApplication";
 import { ILogger } from "../logging/ILogger";
@@ -7,10 +7,11 @@ import { INavBar } from "../render/INavBar";
 import { IConfigurationManager } from "../configuration/IConfigurationManager";
 import GlobalSymbols = require("../globalSymbols");
 import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
+import { IStartupItem } from "./IStartupItem";
+import { IThemeManager } from "../render/theme/IThemeManager";
 
-@Injectable()
+@injectable()
 export class DefaultApplication implements IApplication {
-    container: Container;
     logger: ILogger;
     configurationManager: IConfigurationManager;
     constructor() {
@@ -18,17 +19,11 @@ export class DefaultApplication implements IApplication {
     }
     configureContainer(containerBuilder: Function): IApplication {
         if (containerBuilder != null) {
-            this.container = containerBuilder();
-        } else {
-            this.container = new Container();
+            containerBuilder();
         }
-        //Normally this would be bad practice (service-locator)m but the page navigator needs access to the container.
-        this.container.register([{ token: GlobalSymbols.TContainer, useValue: this.container }]);
         //We are going to attempt to add a logger and configuration manager to the container
-        this.container.register([
-            { token: TLogger, useValue: this.logger },
-            { token: TConfigManager, useValue: this.configurationManager }
-        ]);
+        container.registerInstance(TLogger, this.logger);
+        container.registerInstance(TConfigManager, this.configurationManager);
         return this;
     }
     addLogger(logger: ILogger): IApplication {
@@ -44,11 +39,17 @@ export class DefaultApplication implements IApplication {
         
         return this;
     }
+    async initializeStartupItems() {
+        this.logger.log("Initializing startup items...");
+        for (let startupItem of container.resolveAll<IStartupItem>(GlobalSymbols.TStartupItem)) {
+            await startupItem.initialize();
+        }
+    }
     async run(indexPageToken: any) {
-        this.logger.log("Application started.");
+        await this.initializeStartupItems();
         await this.loadTheme();
-        let pageNavigator: IPageNavigator = this.container.resolve(TPageNavigator);
-        let navigationBar: INavBar = this.container.resolve(TNavBar);
+        let pageNavigator: IPageNavigator = container.resolve(TPageNavigator);
+        let navigationBar: INavBar = container.resolve(TNavBar);
         let body = document.querySelector("#render-body");
         let bodyHeading = document.createElement("heading");
         let bodyMain = document.createElement("main");
@@ -59,11 +60,11 @@ export class DefaultApplication implements IApplication {
         pageNavigator.pageBodyRenderBody = bodyMain;
         await pageNavigator.refreshNavBar();
         await pageNavigator.navigate(indexPageToken);
+        this.logger.log("Application started.");
     }
     private async loadTheme() {
         this.logger.log("Loading css theme...");
-        let themeManager: IThemeManager = this.container.resolve(TThemeManager);
-        await themeManager.initialize();
+        let themeManager: IThemeManager = container.resolve(TThemeManager);
         let fileRef = document.createElement("link");
         fileRef.rel = "stylesheet";
         fileRef.type = "text/css";
