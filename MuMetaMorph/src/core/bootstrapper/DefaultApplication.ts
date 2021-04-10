@@ -1,11 +1,12 @@
 import { Injectable, Inject, Container } from "container-ioc";
-import { TConfigurationManager, TContainer, TLogger, TNavBar, TPageNavigator, TThemeManager } from "../globalSymbols";
+import { TLogger, TConfigurationManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
 import { IApplication } from "./IApplication";
 import { ILogger } from "../logging/ILogger";
 import { IPageNavigator } from "../render/IPageNavigator";
 import { INavBar } from "../render/INavBar";
 import { IConfigurationManager } from "../configuration/IConfigurationManager";
 import { LocalStorageConfigurationManager } from "../configuration/LocalStorageConfigurationManager";
+import GlobalSymbols = require("../globalSymbols");
 
 @Injectable()
 export class DefaultApplication implements IApplication {
@@ -22,8 +23,7 @@ export class DefaultApplication implements IApplication {
             this.container = new Container();
         }
         //Normally this would be bad practice (service-locator)m but the page navigator needs access to the container.
-        this.container.register([{ token: TContainer, useValue: this.container }]);
-
+        this.container.register([{ token: GlobalSymbols.TContainer, useValue: this.container }]);
         //We are going to attempt to add a logger and configuration manager to the container
         this.container.register([
             { token: TLogger, useValue: this.logger },

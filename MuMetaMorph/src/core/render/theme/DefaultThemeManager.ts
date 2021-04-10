@@ -5,7 +5,7 @@ import { ILogger } from "../../logging/ILogger";
 
 @Injectable()
 export class DefaultThemeManager implements IThemeManager {
-    THEME_CONFIG_NAME = "MMM/Theme";
+    THEME_CONFIG_NAME = "Theme";
     stylesheetRootDir: string;
     private themeConfig: any = {};
     constructor(@Inject(TConfigurationManager) private configManager: IConfigurationManager, @Inject(TLogger) private logger: ILogger) {

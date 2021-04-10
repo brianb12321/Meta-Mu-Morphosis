@@ -362,6 +362,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 node_modules/
-dist/
+wwwroot/dist/
 src/**/*.js.map
 src/**/*.js

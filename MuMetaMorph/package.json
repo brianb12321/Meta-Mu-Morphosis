@@ -16,6 +16,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-typescript": "^7.0.0-alpha.19",
     "container-ioc": "^1.7.19",
+    "dexie": "^3.0.3",
     "webpack": "^5.30.0"
   },
   "devDependencies": {
