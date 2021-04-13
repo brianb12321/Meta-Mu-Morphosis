@@ -1,14 +1,13 @@
 import { container, injectable } from "tsyringe"
-import { TLogger, TConfigManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
 import { IApplication } from "./IApplication";
 import { ILogger } from "../logging/ILogger";
-import { IPageNavigator } from "../render/IPageNavigator";
-import { INavBar } from "../render/INavBar";
 import { IConfigurationManager } from "../configuration/IConfigurationManager";
-import GlobalSymbols = require("../globalSymbols");
 import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
 import { IStartupItem } from "./IStartupItem";
 import { IThemeManager } from "../render/theme/IThemeManager";
+import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem } from "../../globalSymbols";
+import { ServiceExtensions } from "../../serviceExtensions";
+import { MainView } from "../../views/mainView";
 
 @injectable()
 export class DefaultApplication implements IApplication {
@@ -17,9 +16,9 @@ export class DefaultApplication implements IApplication {
     constructor() {
         
     }
-    configureContainer(containerBuilder: Function): IApplication {
+    configureContainer(containerBuilder: (serviceExtensions: ServiceExtensions) => void): IApplication {
         if (containerBuilder != null) {
-            containerBuilder();
+            containerBuilder(new ServiceExtensions(this));
         }
         //We are going to attempt to add a logger and configuration manager to the container
         container.registerInstance(TLogger, this.logger);
@@ -41,25 +40,18 @@ export class DefaultApplication implements IApplication {
     }
     async initializeStartupItems() {
         this.logger.log("Initializing startup items...");
-        for (let startupItem of container.resolveAll<IStartupItem>(GlobalSymbols.TStartupItem)) {
+        for (let startupItem of container.resolveAll<IStartupItem>(TStartupItem)) {
             await startupItem.initialize();
         }
     }
     async run(indexPageToken: any) {
         await this.initializeStartupItems();
         await this.loadTheme();
-        let pageNavigator: IPageNavigator = container.resolve(TPageNavigator);
-        let navigationBar: INavBar = container.resolve(TNavBar);
         let body = document.querySelector("#render-body");
-        let bodyHeading = document.createElement("heading");
-        let bodyMain = document.createElement("main");
-        body.appendChild(bodyHeading);
-        body.appendChild(bodyMain);
-        pageNavigator.navigationBar = navigationBar;
-        pageNavigator.navigationRenderBody = bodyHeading;
-        pageNavigator.pageBodyRenderBody = bodyMain;
-        await pageNavigator.refreshNavBar();
-        await pageNavigator.navigate(indexPageToken);
+        let view: MainView = new MainView();
+        view.renderBody = body;
+        view.afterConstruction();
+        await view.render();
         this.logger.log("Application started.");
     }
     private async loadTheme() {

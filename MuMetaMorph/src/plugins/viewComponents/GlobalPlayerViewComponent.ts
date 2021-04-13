@@ -1,0 +1,1 @@
+﻿//Represents a view component 

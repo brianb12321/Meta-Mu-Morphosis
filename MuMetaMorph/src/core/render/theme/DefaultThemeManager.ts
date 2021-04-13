@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IConfigurationManager } from "../../configuration/IConfigurationManager";
-import { TConfigManager, TLogger } from "../../globalSymbols";
+import { TConfigManager, TLogger } from "../../../globalSymbols";
 import { ILogger } from "../../logging/ILogger";
 import { ITheme } from "./ITheme";
 import { IThemeConfiguration } from "./IThemeConfiguration";

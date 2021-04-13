@@ -6,6 +6,7 @@ main {
 }
 nav {
     background-color: blue;
+    overflow: hidden;
 }
 nav ul {
     display: flex;
@@ -21,4 +22,27 @@ nav ul li:hover {
 }
 nav ul li a {
     cursor: pointer;
+}
+
+.player {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px lightblue solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.player audio {
+    display: table;
+    margin: 0 auto;
+}
+table {
+    border: 1px lightblue solid;
+}
+table th {
+    background-color: black;
+    color: white;
+}
+.invisible {
+    display: none;
 }

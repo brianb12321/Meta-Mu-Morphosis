@@ -361,7 +361,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-node_modules/
-wwwroot/dist/
-src/**/*.js.map
-src/**/*.js
+MuMetaMorph/node_modules/
+MuMetaMorph/wwwroot/dist/
+MuMetaMorph/src/**/*.js.map
+MuMetaMorph/src/**/*.js
+MuMetaMorph/wwwroot/**/*.mp3
+.vs

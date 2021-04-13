@@ -8,6 +8,7 @@
     "tsc": "./node_modules/.bin/tsc",
     "webpack": "webpack",
     "cleanJS": "deleteJsFiles.bat",
+    "cleanMap":  "deleteMapFiles.bat",
     "build": "npm run tsc && npm run webpack && npm run cleanJS"
   },
   "author": "",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "howler": "^2.2.1",
     "webpack-cli": "^4.6.0"
   }
 }

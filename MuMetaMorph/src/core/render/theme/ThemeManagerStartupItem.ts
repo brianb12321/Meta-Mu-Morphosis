@@ -1,6 +1,6 @@
 ﻿import { inject, injectable } from "tsyringe";
 import { IStartupItem } from "../../bootstrapper/IStartupItem";
-import { TLogger, TThemeManager } from "../../globalSymbols";
+import { TLogger, TThemeManager } from "../../../globalSymbols";
 import { ILogger } from "../../logging/ILogger";
 import { IThemeManager } from "./IThemeManager";
 

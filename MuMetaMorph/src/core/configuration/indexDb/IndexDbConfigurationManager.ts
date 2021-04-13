@@ -1,5 +1,5 @@
 ﻿import { inject, injectable } from "tsyringe";
-import { TLogger } from "../../globalSymbols";
+import { TLogger } from "../../../globalSymbols";
 import { ILogger } from "../../logging/ILogger";
 import { ConfigurationObject } from "../ConfigurationObject";
 import { IConfiguration } from "../IConfiguration";
