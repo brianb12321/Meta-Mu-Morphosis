@@ -6,6 +6,9 @@ export abstract class Widget {
     public set parentWidget(value: Widget) {
         this._parentWidget = value;
     }
+    public get parentWidget(): Widget {
+        return this._parentWidget;
+    }
     public renderBody: Element;
     public widgets: Widget[];
     constructor() {
@@ -13,6 +16,8 @@ export abstract class Widget {
     }
     //Gets executed when the render method has been invoked.
     public onRender: () => void;
+    //Any arguments you wish to pass to this widget.
+    public arguments: any;
     abstract shouldRender(): boolean;
     clear(): void {
         this.renderBody.innerHTML = "";
@@ -20,7 +25,7 @@ export abstract class Widget {
     async render(): Promise<void> {
         if (!this._alreadyRendered && this.shouldRender()) {
             if (this.onRender != null) {
-                this.onRender();
+                await this.onRender();
             }
             for (let subWidget of this.widgets) {
                 await subWidget.render();

@@ -16,6 +16,7 @@ export class HomeView extends View<HomeViewModel>{
         this.audioInputField.parentWidget = this;
         this.testButton = new ButtonWidget();
         this.testButton.parentWidget = this;
+        this.testButton.text = "Switch Song";
         let heading: HeadingWidget = new HeadingWidget(1, "Index Page");
         heading.parentWidget = this;
         this.widgets.push(heading);

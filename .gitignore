@@ -367,3 +367,4 @@ MuMetaMorph/src/**/*.js.map
 MuMetaMorph/src/**/*.js
 MuMetaMorph/wwwroot/**/*.mp3
 .vs
+msuicDesign.xml

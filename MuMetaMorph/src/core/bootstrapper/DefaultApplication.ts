@@ -5,14 +5,19 @@ import { IConfigurationManager } from "../configuration/IConfigurationManager";
 import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
 import { IStartupItem } from "./IStartupItem";
 import { IThemeManager } from "../render/theme/IThemeManager";
-import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem } from "../../globalSymbols";
+import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem, TSongManager } from "../../globalSymbols";
 import { ServiceExtensions } from "../../serviceExtensions";
 import { MainView } from "../../views/mainView";
+import { ISongManager } from "../music/ISongManager";
+import { SongManager } from "../music/SongManager";
+import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurationDatabase";
 
 @injectable()
 export class DefaultApplication implements IApplication {
-    logger: ILogger;
-    configurationManager: IConfigurationManager;
+    private logger: ILogger;
+    private configurationManager: IConfigurationManager;
+    private database: MMMConfigurationDatabase;
+    private songManager: ISongManager;
     constructor() {
         
     }
@@ -23,17 +28,34 @@ export class DefaultApplication implements IApplication {
         //We are going to attempt to add a logger and configuration manager to the container
         container.registerInstance(TLogger, this.logger);
         container.registerInstance(TConfigManager, this.configurationManager);
+        container.registerInstance(TSongManager, this.songManager);
         return this;
     }
     addLogger(logger: ILogger): IApplication {
         this.logger = logger;
         return this;
     }
+    useDatabase(databaseBuilder: Function): IApplication {
+        if (databaseBuilder != null) {
+            this.database = databaseBuilder();
+        } else {
+            this.database = new MMMConfigurationDatabase(this.logger);
+        }
+        return this;
+    }
+    addSongManager(songManagerBuilder: Function): IApplication {
+        if (songManagerBuilder != null) {
+            this.songManager = songManagerBuilder();
+        } else {
+            this.songManager = new SongManager(this.database);
+        }
+        return this;
+    }
     addConfigurationManager(configBuilder: Function): IApplication {
         if (configBuilder != null) {
             this.configurationManager = configBuilder();
         } else {
-            this.configurationManager = new IndexDbConfigurationManager(this.logger);
+            this.configurationManager = new IndexDbConfigurationManager(this.logger, this.database);
         }
         
         return this;

@@ -11,14 +11,14 @@ export class AudioWidget extends Widget {
         this._src = value;
         this.audio.src = this._src;
     }
+    async play(): Promise<void> {
+        await this.audio.play();
+    }
     constructor() {
         super();
         this.audio = document.createElement("audio");
         this.renderBody = this.audio;
-        this.onRender = async () => {
-            this.audio.controls = true;
-            this.audio.src = this._src;
-        }
+        this.audio.controls = true;
     }
 
     shouldRender(): boolean {

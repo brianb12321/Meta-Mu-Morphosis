@@ -2,13 +2,14 @@
 import "reflect-metadata";
 import { ConsoleLogger } from "./core/logging/ConsoleLogger";
 import { DefaultApplication } from "./core/bootstrapper/DefaultApplication";
-import { IndexDbConfigurationManager } from "./core/configuration/indexDb/IndexDbConfigurationManager";
 import { addViewModels } from "./viewModelCollection";
 
 const logger = new ConsoleLogger();
 const application = new DefaultApplication()
     .addLogger(logger)
-    .addConfigurationManager(() => new IndexDbConfigurationManager(logger))
+    .useDatabase(null)
+    .addConfigurationManager(null)
+    .addSongManager(null)
     .configureContainer((extensions) => {
         extensions.addThemeManager();
         addViewModels();

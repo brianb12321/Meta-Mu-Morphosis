@@ -1,4 +1,4 @@
-﻿/*Add any view-model bindings here.
+﻿/* Add any view-model bindings here.
 
 1. Add any symbols necessary for the IOC container to resolve the view-model.
 2. Create a factory method that will resolve the symbol defined in step 1 to a view model, because
@@ -6,7 +6,9 @@
 */
 
 import { container } from "tsyringe";
+import { AddNewSongViewModel } from "./views/viewModels/AddNewSongViewModel";
 import { MainViewModel } from "./views/viewModels/MainViewModel";
+import { MusicDetailsViewModel } from "./views/viewModels/MusicDetailsViewModel";
 import { MusicViewModel } from "./views/viewModels/MusicViewModel";
 import { NavigationBarViewModel } from "./views/viewModels/NavigationBarViewModel";
 import { PlayerViewModel } from "./views/viewModels/PlayerViewModel";
@@ -18,7 +20,7 @@ export function getMainViewModel(): MainViewModel {
 };
 export const TMusicViewModel = Symbol("MusicViewModel");
 export function getMusicViewModel(): MusicViewModel {
-    let value: MusicViewModel = container.resolve(TMainViewModel);
+    let value: MusicViewModel = container.resolve(TMusicViewModel);
     return value;
 };
 export const TNavigationBarViewModel = Symbol("NavigationBarViewModel");
@@ -31,10 +33,22 @@ export function getPlayerViewModel(): PlayerViewModel {
     let value: PlayerViewModel = container.resolve(TPlayerViewModel);
     return value;
 };
+export const TAddNewSongViewModel = Symbol("AddNewSongViewModel");
+export function getAddNewSongViewModel(): AddNewSongViewModel {
+    let value: AddNewSongViewModel = container.resolve(TAddNewSongViewModel);
+    return value;
+};
+export const TMusicDetailsViewModel = Symbol("MusicDetailsViewModel");
+export function getMusicDetailsViewModel(): MusicDetailsViewModel {
+    let value: MusicDetailsViewModel = container.resolve(TMusicDetailsViewModel);
+    return value;
+};
 
 export function addViewModels(): void {
     container.registerType(TMainViewModel, MainViewModel);
     container.registerType(TMusicViewModel, MusicViewModel);
     container.registerType(TNavigationBarViewModel, NavigationBarViewModel);
     container.registerType(TPlayerViewModel, PlayerViewModel);
+    container.registerType(TAddNewSongViewModel, AddNewSongViewModel);
+    container.registerType(TMusicDetailsViewModel, MusicDetailsViewModel);
 }

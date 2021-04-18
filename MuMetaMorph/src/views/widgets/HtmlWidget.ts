@@ -14,6 +14,22 @@ export class HtmlWidget extends Widget {
         this.element = document.createElement(elementName);
         this.element.innerHTML = innerHTML;
     }
+    createElement(elementName: string, elementBuilder: (element: HTMLElement) => void): HtmlWidget {
+        let htmlWidget = new HtmlWidget(elementName, "");
+        this.widgets.push(htmlWidget);
+        if (elementBuilder != null)
+            elementBuilder(htmlWidget.element);
+
+        return htmlWidget;
+    }
+    createElementAndAppend(elementName: string, elementBuilder: (element: HTMLElement) => void): HtmlWidget {
+        let htmlWidget = new HtmlWidget(elementName, "");
+        this.widgets.push(htmlWidget);
+        if (elementBuilder != null)
+            elementBuilder(htmlWidget.element);
+
+        return this;
+    }
     shouldRender(): boolean {
         return true;
     }
