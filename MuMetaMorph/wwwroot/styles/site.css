@@ -1,8 +1,13 @@
 * {
+    box-sizing: border-box;
     margin: 0;
 }
-main {
+.main {
     margin: 10px;
+    overflow-y: auto;
+}
+.main-musicDetails {
+    overflow-y: auto;
 }
 nav {
     background-color: blue;
@@ -25,7 +30,8 @@ nav ul li a {
 }
 
 .player {
-    position: absolute;
+    background-color: white;
+    position: fixed;
     bottom: 0;
     width: 100%;
     border-top: 1px lightblue solid;
@@ -46,36 +52,177 @@ table th {
 .invisible {
     display: none;
 }
-button {
+.btn {
     background-color: blue;
     text-decoration: none;
     text-align: center;
     color: white;
-    border: 2px white solid;
+    border: 0;
     padding: 10px;
     border-radius: 6px;
 }
-button:hover {
+.btn-submit {
+    padding: 12px 20px;
+}
+.btn:hover {
     background-color: #252592;
 }
 
-button:focus {
+.btn:focus {
     background-color: darkblue;
 }
+/* https://www.w3schools.com/css/css_form.asp */
 
 input {
     width: 100%;
 }
-input[type=text] {
+input[type=text],
+    input[type=date],
+    input[type=url], 
+    select, textarea {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
 }
-select {
-  width: 100%;
-  padding: 16px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #f1f1f1;
+input:invalid {
+    border: 2px solid red;
+}
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+form {
+    margin: 0 auto;
+    width: 50%;
+}
+.form-container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    padding-bottom: 10px;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+    form {
+        margin: unset;
+        width: 100%;
+    }
+}
+
+/* https://www.w3schools.com/howto/howto_js_accordion.asp */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    overflow: hidden;
+    max-height: 0;
+    border: 1px solid lightblue;
+    transition: max-height 0.2s ease-out;
+}
+
+/* https://www.w3schools.com/howto/howto_css_cards.asp */
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color: darkgray;
+    cursor: pointer;
+}
+
+/* Add some padding inside the card container */
+.card-container {
+    padding: 2px 16px;
+}
+
+/* CSS Grid */
+.card-grid {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 5px;
+    grid-row-gap: 10px;
+}
+
+/*Image styles*/
+.music-banner {
+    width: 100%;
+    object-fit: fill;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: lightgrey;
+}
+.music-banner-image-div {
+    overflow-y: auto;
+}
+.banner-image {
+    width: 100%;
+}
+.banner-controls {
+    padding: 10px;
+    height: 100px;
+}
+.banner-controls-list {
+    display: flex;
+}
+.banner-controls-list a {
+    cursor: pointer;
+    color: blue;
+    padding: 10px;
+}
+
+/* Admonitions */
+.admon-warning {
+    background-color: yellow;
+    padding: 10px;
 }

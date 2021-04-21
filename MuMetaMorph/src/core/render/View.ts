@@ -7,10 +7,4 @@ export abstract class View<TViewModel extends BaseViewModel> extends Widget {
 	public dataContext: TViewModel;
     //Executed after the constructor finished loading, but right before the DOM gets rendered.
     public afterConstruction: () => void;
-    protected viewSwitchRequestListener: (viewToSwitch: string, args: any) => void;
-    public dispatchViewSwitchRequest(viewToSwitch: string, args: any): void {
-        if (this.viewSwitchRequestListener != null) {
-            this.viewSwitchRequestListener(viewToSwitch, args);
-        }
-    }
 }

@@ -11,6 +11,7 @@ export class HomeView extends View<HomeViewModel>{
     constructor() {
         super();
         let mainElement = document.createElement("main");
+        mainElement.classList.add("main");
         this.renderBody = mainElement;
         this.audioInputField = new InputWidget();
         this.audioInputField.parentWidget = this;

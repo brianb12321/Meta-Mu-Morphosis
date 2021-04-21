@@ -14,6 +14,7 @@ export class ButtonWidget extends Widget {
     constructor() {
         super();
         this.button = document.createElement("button");
+        this.button.classList.add("btn");
         this.renderBody = this.button;
     }
     shouldRender(): boolean {

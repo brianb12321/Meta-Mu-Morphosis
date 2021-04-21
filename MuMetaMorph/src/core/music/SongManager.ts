@@ -5,13 +5,15 @@ import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurat
 
 @injectable()
 export class SongManager implements ISongManager {
+
     private currentSong: ISong;
     songSwitched: (song: ISong) => void;
     constructor(private db: MMMConfigurationDatabase) {
 
     }
-    async addSong(song: ISong): Promise<void> {
-        await this.db.song.add(song);
+    async addSong(song: ISong): Promise<ISong> {
+        let newSongId = await this.db.song.add(song);
+        return await this.db.song.get(newSongId);
     }
     async switchSong(songId: number): Promise<void> {
         this.currentSong = await this.db.song.get(songId);
@@ -23,5 +25,8 @@ export class SongManager implements ISongManager {
     }
     async getSongById(songId: number): Promise<ISong> {
         return await this.db.song.get(songId);
+    }
+    async deleteSongById(songId: number): Promise<void> {
+        await this.db.song.delete(songId);
     }
 }

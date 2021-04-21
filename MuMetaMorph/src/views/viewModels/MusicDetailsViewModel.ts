@@ -16,10 +16,16 @@ export class MusicDetailsViewModel extends BaseViewModel {
     public get songName(): string {
         return this.song.name;
     }
+    public get songBannerImageUrl(): string {
+        return this.song.bannerImageUrl;
+    }
     constructor(@inject(TSongManager) public songManager: ISongManager) {
         super();
     }
     async switchSong(): Promise<void> {
         await this.songManager.switchSong(this.song.songId);
+    }
+    async deleteSong(): Promise<void> {
+        await this.songManager.deleteSongById(this.songId);
     }
 }
