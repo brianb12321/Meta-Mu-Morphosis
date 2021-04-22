@@ -14,6 +14,7 @@ export class PlayerView extends View<PlayerViewModel> {
         this.dataContext = getPlayerViewModel();
         let container = document.createElement("div");
         container.classList.add("player");
+        container.style.marginTop = "40px";
         this.renderBody = container;
         let hideButton = new ButtonWidget();
         hideButton.parentWidget = this;

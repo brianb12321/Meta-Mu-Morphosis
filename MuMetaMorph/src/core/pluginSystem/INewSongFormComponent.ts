@@ -1,12 +1,12 @@
-﻿///Plugins can add additional form entries when a user adds a new song.
-///Use this component to gather additional data needed in order to run your plugin properly.
-
-import { SongMetadata } from "../music/SongMetadata";
+﻿import { SongMetadata } from "../music/SongMetadata";
 import { IFormBuilder } from "../render/IFormBuilder";
-import { PluginBase } from "./PluginBase";
+import { IPluginComponent } from "./IPluginComponent";
 
-export interface INewSongFormComponent {
-    basePlugin: PluginBase;
+/**
+ * Plugins can add additional form entries when a user adds a new song.
+ * Use this component to gather additional data needed in order to run your plugin properly.
+ */
+export interface INewSongFormComponent extends IPluginComponent {
     addForm(formBuilder: IFormBuilder): void;
     saveSong(formData: any, metadata: SongMetadata): boolean;
 }

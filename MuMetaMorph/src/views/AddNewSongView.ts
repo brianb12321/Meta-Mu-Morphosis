@@ -66,7 +66,7 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         for (let section of this.dataContext.accordionSections) {
             //Run code if section is associated with a plugin.
             if (section.component != null) {
-                let inputs = section.panel.renderBody.querySelectorAll(".row .col-75 input");
+                let inputs = section.panel.renderBody.querySelectorAll(".row .col-75 .input-search");
                 for (let j = 0; j < inputs.length; j++) {
                     let inputElement = inputs[j] as HTMLInputElement;
                     this.dataContext.formData[section.component.basePlugin.pluginName][inputElement.id] = inputElement.value;

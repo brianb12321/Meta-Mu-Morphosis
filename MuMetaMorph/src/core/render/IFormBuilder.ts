@@ -4,5 +4,6 @@ export interface IFormBuilder {
     addDateInput(label: string, inputId: string, required: boolean): IFormBuilder;
     addUrlInput(label: string, inputId: string, required: boolean): IFormBuilder;
     addElement(elementName: string, elementBuilder: (element: HTMLElement) => void): IFormBuilder;
+    addTextarea(label: string, inputId: string, required: boolean): IFormBuilder;
     addParagraph(paragraphText: string): IFormBuilder;
 }

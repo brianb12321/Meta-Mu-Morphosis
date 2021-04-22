@@ -12,12 +12,18 @@ export class HtmlWidget extends Widget {
     }
     constructor(elementName: string, innerHTML: string) {
         super();
-        this.element = document.createElement(elementName);
-        this.element.innerHTML = innerHTML;
+        if (elementName != null) {
+            this.element = document.createElement(elementName);
+            this.element.innerHTML = innerHTML;
+        }
     }
+
     createElement(elementName: string, elementBuilder: (element: HTMLElement) => void, appendChild = false): HtmlWidget {
         let htmlWidget = new HtmlWidget(elementName, "");
         htmlWidget.parentWidget = this;
+        if (this.renderBody == null) {
+            this.renderBody = htmlWidget.renderBody;
+        }
         if (appendChild || this.shouldAppendChild) {
             htmlWidget.shouldAppendChild = true;
             this.renderBody.appendChild(htmlWidget.renderBody);
@@ -32,6 +38,9 @@ export class HtmlWidget extends Widget {
     createElementAndAppend(elementName: string, elementBuilder: (element: HTMLElement) => void, appendChild = false): HtmlWidget {
         let htmlWidget = new HtmlWidget(elementName, "");
         htmlWidget.parentWidget = this;
+        if (this.renderBody == null) {
+            this.renderBody = htmlWidget.renderBody;
+        }
         if (appendChild || this.shouldAppendChild) {
             htmlWidget.shouldAppendChild = true;
             this.renderBody.appendChild(htmlWidget.renderBody);

@@ -1,4 +1,4 @@
-﻿import { injectable, inject } from "tsyringe";
+﻿import { injectable } from "tsyringe";
 import { ISongManager } from "./ISongManager";
 import { ISong } from "./ISong";
 import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurationDatabase";

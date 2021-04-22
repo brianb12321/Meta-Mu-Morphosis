@@ -19,6 +19,7 @@ export class NavBarView extends View<NavigationBarViewModel> {
             this.renderBody.appendChild(navBar);
         }
     }
+
     addNavLink(linkName: string) {
         let listItem = document.createElement("li");
         let anchor = document.createElement("a");

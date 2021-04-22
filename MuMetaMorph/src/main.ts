@@ -4,6 +4,7 @@ import { ConsoleLogger } from "./core/logging/ConsoleLogger";
 import { DefaultApplication } from "./core/bootstrapper/DefaultApplication";
 import { addViewModels } from "./viewModelCollection";
 import { TestPlugin } from "./plugins/TestPlugin";
+import { HtmlPlugin } from "./plugins/HTMLPlugin/HtmlPlugin";
 
 const logger = new ConsoleLogger();
 const application = new DefaultApplication()
@@ -20,6 +21,7 @@ const application = new DefaultApplication()
         extensions.addPlugin(new TestPlugin("MuseScore", "MuseScore"));
         extensions.addPlugin(new TestPlugin("Metronome", "Metronome"));
         extensions.addPlugin(new TestPlugin("RandomStuff", "Random Stuff"));
+        extensions.addPlugin(new HtmlPlugin());
     });
 
 application.run("Home");

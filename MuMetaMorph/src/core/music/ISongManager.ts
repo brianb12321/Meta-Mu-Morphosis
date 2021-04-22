@@ -1,4 +1,5 @@
-﻿import { ISong } from "./ISong";
+﻿import { PluginBase } from "../pluginSystem/PluginBase";
+import { ISong } from "./ISong";
 
 //Manages the current playing song and manages the song database.
 export interface ISongManager {
@@ -8,5 +9,5 @@ export interface ISongManager {
     switchSong(songId: number): Promise<void>;
     getSongs(): Promise<ISong[]>;
     getSongById(songId: number): Promise<ISong>;
-    deleteSongById(songId: number): Promise<void>
+    deleteSongById(songId: number): Promise<void>;
 }
