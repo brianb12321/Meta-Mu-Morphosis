@@ -6,7 +6,7 @@ import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormCompo
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { BaseViewModel } from "../../core/render/BaseViewModel";
 import { TPlugins, TSongManager } from "../../globalSymbols";
-import { HtmlWidget } from "../widgets/HtmlWidget";
+import { AccordionSection } from "../widgets/AccordionWidget";
 
 @injectable()
 export class AddNewSongViewModel extends BaseViewModel {
@@ -26,10 +26,14 @@ export class AddNewSongViewModel extends BaseViewModel {
             }
         }
     }
+    async importSongAndClear(jsonText: string): Promise<number> {
+        let song = await this.songManager.jsonToSong(jsonText);
+        return song.songId;
+    }
     async addSongAndClear(): Promise<number> {
         let song: ISong = {
             name: this.formData.main.songName as string,
-            dateReleased: this.formData.main.dateReleased as Date,
+            dateAdded: new Date(Date.now()),
             audioStreamUrl: this.formData.main.audioStreamUrl as string,
             bannerImageUrl: this.formData.main.songImageUrl,
             pluginsUsed: this.pluginsUsed.map(component => component.basePlugin.pluginName),
@@ -46,10 +50,4 @@ export class AddNewSongViewModel extends BaseViewModel {
         let newSong = await this.songManager.addSong(song);
         return newSong.songId;
     }
-}
-
-export interface AccordionSection {
-    accordionSection: HtmlWidget;
-    panel: HtmlWidget;
-    component: INewSongFormComponent;
 }

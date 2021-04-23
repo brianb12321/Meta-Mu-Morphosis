@@ -29,4 +29,24 @@ export class SongManager implements ISongManager {
     async deleteSongById(songId: number): Promise<void> {
         await this.db.song.delete(songId);
     }
+
+    async putSong(songId: number, newSong: ISong): Promise<void> {
+        await this.db.song.put(newSong, songId);
+    }
+    async songToJson(songId: number): Promise<string> {
+        let song = await this.getSongById(songId);
+        return JSON.stringify(song);
+    }
+    async jsonToSong(jsonText: string): Promise<ISong> {
+        let jsonObject = JSON.parse(jsonText);
+        let song: ISong = {
+            name: jsonObject.name,
+            dateAdded: new Date(Date.now()),
+            bannerImageUrl: jsonObject.bannerImageUrl,
+            audioStreamUrl: jsonObject.audStreamUrl,
+            pluginsUsed: jsonObject.pluginsUsed,
+            additionalMetadata: jsonObject.additionalMetadata
+        };
+        return await this.addSong(song);
+    }
 }

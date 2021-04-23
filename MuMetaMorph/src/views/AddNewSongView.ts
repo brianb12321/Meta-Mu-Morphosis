@@ -1,9 +1,12 @@
 ﻿import { INewSongFormComponent } from "../core/pluginSystem/INewSongFormComponent";
 import { HtmlWidgetFormBuilder } from "../core/render/HTMLWidgetFormBuilder";
+import { ITabNavigator } from "../core/render/ITabNavigator";
 import { IViewNavigator } from "../core/render/IViewNavigator";
 import { View } from "../core/render/View";
 import { getAddNewSongViewModel } from "../viewModelCollection";
-import { AccordionSection, AddNewSongViewModel } from "./viewModels/AddNewSongViewModel";
+import { AddNewSongViewModel } from "./viewModels/AddNewSongViewModel";
+import { AccordionWidget } from "./widgets/AccordionWidget";
+import { CardGridWidget } from "./widgets/CardGridWidget";
 import { HtmlWidget } from "./widgets/HtmlWidget";
 
 export class AddNewSongView extends View<AddNewSongViewModel> {
@@ -13,12 +16,40 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         let mainElement = document.createElement("main");
         mainElement.classList.add("main");
         let html = new HtmlWidget("form", "");
-        let accordion = html.createElement("div", div => div.id = "accordion");
-        let panel = this.addAccordionSection(accordion, "Section 1", false, null).panel;
-        let formBuilder = new HtmlWidgetFormBuilder(panel);
+        (html.renderBody as HTMLFormElement).autocomplete = "off";
+        html.renderBody.classList.add("form-center");
+        let accordion = new AccordionWidget();
+        html.widgets.push(accordion);
+        accordion.accordionAdded = (section) => this.dataContext.accordionSections.push(section);
+        let importJsonPanel = accordion.addAccordionSection("Import Song From JSON", false, null).panel;
+        let importJsonForm = new HtmlWidgetFormBuilder(importJsonPanel);
+        importJsonForm.addParagraph("You have the ability to import a song from a JSON file.")
+            .addFileInput("JSON File", "jsonFileInput", false, fileInput => {
+                fileInput.accept = ".json";
+            })
+            .addElement("button", button => {
+                button.classList.add("btn", "btn-submit");
+                button.textContent = "Import";
+                button.addEventListener("click", () => {
+                    let jsonFileInput = document.querySelector("#jsonFileInput") as any;
+                    if (jsonFileInput.files.length === 0) {
+                        alert("Please select a file.");
+                        return;
+                    }
+                    let file = jsonFileInput.files[0];
+                    let fileReader = new FileReader();
+                    fileReader.onload = async (evt) => {
+                        let newSongId = await this.dataContext.importSongAndClear(fileReader.result.toString());
+                        alert("Song Imported!");
+                        viewNavigator.navigate("MusicDetails", { songId: newSongId });
+                    }
+                    fileReader.readAsText(file);
+                });
+            });
+        let formPanel = accordion.addAccordionSection("New Song", false, null).panel;
+        let formBuilder = new HtmlWidgetFormBuilder(formPanel);
         formBuilder.addTextInput("Song Name", "songNameInput", true)
             .addTextInput("Artist", "artistInput", true)
-            .addDateInput("Date Released", "dateReleasedInput", true)
             .addUrlInput("URL To Song Image", "songImageInput", false)
             .addElement("div", div => {
                 div.classList.add("admon-warning");
@@ -26,12 +57,9 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
                     "WARNING: the image will be resized to fit the banner width. Any image size is allowed.";
             })
             .addUrlInput("URL To Audio", "urlInput", true);
-
-        let cardDiv = html.createElement("div", div => {
-            div.id = "card-div";
-            div.classList.add("card-grid");
-        });
-        this.renderCards(cardDiv, accordion);
+        let cardGrid = new CardGridWidget();
+        html.widgets.push(cardGrid);
+        this.renderCards(cardGrid, accordion);
         html.createElement("button", element => {
             let button = element as HTMLButtonElement;
             button.id = "submit";
@@ -47,8 +75,6 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
                 this.dataContext.formData.main = {};
                 this.dataContext.formData.main.songName = (html.element.querySelector("div #songNameInput") as HTMLInputElement).value;
                 this.dataContext.formData.main.artist = (html.element.querySelector("div #artistInput") as HTMLInputElement).value;
-                this.dataContext.formData.main.dateReleased =
-                    new Date(((html.element.querySelector("div #dateReleasedInput") as HTMLInputElement).value));
                 this.dataContext.formData.main.songImageUrl =
                     (html.element.querySelector("div #songImageInput") as HTMLInputElement).value;
                 this.dataContext.formData.main.audioStreamUrl = (html.element.querySelector("div #urlInput") as HTMLInputElement).value;
@@ -62,82 +88,49 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         this.renderBody = mainElement;
         this.widgets.push(html);
     }
-    private populateFormData(accordion: HtmlWidget) {
+    private populateFormData(accordion: AccordionWidget) {
         for (let section of this.dataContext.accordionSections) {
             //Run code if section is associated with a plugin.
-            if (section.component != null) {
+            if (section.additionalData != null) {
                 let inputs = section.panel.renderBody.querySelectorAll(".row .col-75 .input-search");
                 for (let j = 0; j < inputs.length; j++) {
                     let inputElement = inputs[j] as HTMLInputElement;
-                    this.dataContext.formData[section.component.basePlugin.pluginName][inputElement.id] = inputElement.value;
+                    this.dataContext.formData[(section.additionalData as INewSongFormComponent).basePlugin.pluginName][inputElement.id] = inputElement.value;
                 }
             }
         }
     }
-    private removeAccordionSection(panel: HtmlWidget, accordionDiv: HtmlWidget) {
-        accordionDiv.removeElement(panel.parentWidget as HtmlWidget, true);
-    }
-    private addAccordionSection(accordionDiv: HtmlWidget, name: string, appendChild = false, component: INewSongFormComponent): AccordionSection {
-        let accordionSection = accordionDiv.createElement("div", div => div.classList.add("accordion-section"), appendChild);
-        accordionSection.createElement("button", button => {
-            button.classList.add("accordion");
-            button.textContent = name;
-            this.setupAccordionEvents(button as HTMLButtonElement);
-        }, appendChild);
-        let panel = accordionSection.createElement("div", element => {
-            element.classList.add("panel");
-            element.classList.add("form-container");
-        }, appendChild);
-        let accordionSectionObj: AccordionSection = { accordionSection: accordionSection, component: component, panel: panel }
-        this.dataContext.accordionSections.push(accordionSectionObj);
-        return accordionSectionObj;
-    }
-    private setupAccordionEvents(accordion: HTMLButtonElement): void {
-        accordion.addEventListener("click", () => {
-            accordion.classList.toggle("active");
-            let panel: any = accordion.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
+    private addCard(cardGrid: CardGridWidget,
+        accordionWidget: AccordionWidget,
+        component: INewSongFormComponent,
+        appendChild: boolean = false) {
+        cardGrid.addCard(component.basePlugin.friendlyPluginName, (component.basePlugin.description as string) ?? "No Description has been provided for this plugin.", appendChild, (card) => {
+            let section = accordionWidget.addAccordionSection(component.basePlugin.pluginName, true, component);
+            let panel = section.panel;
+            //Wire up the remove button.
+            panel.createElement("button", button => {
+                button.textContent = "Remove";
+                button.classList.add("btn");
+                button.addEventListener("click", () => {
+                    accordionWidget.removeAccordionSection(panel);
+                    this.dataContext.accordionSections.splice(
+                        this.dataContext.accordionSections.indexOf(section),
+                        1);
+                    this.dataContext.pluginsUsed.splice(this.dataContext.pluginsUsed.indexOf(component), 1);
+                    this.dataContext.formData[component.basePlugin.pluginName] = null;
+                    this.addCard(cardGrid, accordionWidget, component, true);
+                });
+            });
+            component.addForm(new HtmlWidgetFormBuilder(panel, true));
+            //Segregate form data. We do not want plugins to read other plugin's form data.
+            this.dataContext.formData[component.basePlugin.pluginName] = {};
+            this.dataContext.pluginsUsed.push(component);
+            cardGrid.renderBody.removeChild(card);
         });
     }
-    private addCard(cardDiv: HtmlWidget, accordionDiv: HtmlWidget, component: INewSongFormComponent, appendChild = false) {
-        cardDiv.createElement("div", div => {
-                div.classList.add("card", "card-grid-item");
-                div.addEventListener("click",
-                    () => {
-                        let section = this.addAccordionSection(accordionDiv, component.basePlugin.pluginName, true, component);
-                        let panel = section.panel;
-                        //Wire up the remove button.
-                        panel.createElement("button", button => {
-                            button.textContent = "Remove";
-                            button.classList.add("btn");
-                            button.addEventListener("click", () => {
-                                this.removeAccordionSection(panel, accordionDiv);
-                                this.dataContext.accordionSections.splice(
-                                    this.dataContext.accordionSections.indexOf(section),
-                                    1);
-                                this.dataContext.pluginsUsed.splice(this.dataContext.pluginsUsed.indexOf(component), 1);
-                                this.dataContext.formData[component.basePlugin.pluginName] = null;
-                                this.addCard(cardDiv, accordionDiv, component, true);
-                            });
-                        });
-                        component.addForm(new HtmlWidgetFormBuilder(panel, true));
-                        //Segregate form data. We do not want plugins to read other plugin's form data.
-                        this.dataContext.formData[component.basePlugin.pluginName] = {};
-                        this.dataContext.pluginsUsed.push(component);
-                        cardDiv.renderBody.removeChild(div);
-                    });
-        }, appendChild)
-            .createElement("div", div => div.classList.add("card-container"))
-            .createElementAndAppend("h4", h4 => h4.textContent = component.basePlugin.pluginName)
-            .createElementAndAppend("p", (p: HTMLElement) => p.textContent = component.basePlugin.description as string ?? "No Description has been provided for this plugin.");
-    }
-    private renderCards(html: HtmlWidget, accordionDiv: HtmlWidget): void {
+    private renderCards(cardGrid: CardGridWidget, accordionDiv: AccordionWidget): void {
         for (let component of this.dataContext.supportedPluginComponents) {
-            this.addCard(html, accordionDiv, component);
+            this.addCard(cardGrid, accordionDiv, component);
         }
     }
     shouldRender(): boolean {

@@ -2,6 +2,7 @@
 import { IMusicDetailsPanel } from "../../core/pluginSystem/IMusicDetailsPanel";
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { HtmlWidget } from "../../views/widgets/HtmlWidget";
+import { ISong } from "../../core/music/ISong";
 
 export class HtmlPanel implements IMusicDetailsPanel {
     public get panelName(): string {
@@ -10,9 +11,11 @@ export class HtmlPanel implements IMusicDetailsPanel {
     public get panelId(): string {
         return "HTML";
     }
+    song: ISong;
     constructor(public basePlugin: PluginBase) {
 
     }
+
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         let html: string = metadata.value["html"];
         content.createElement("div", div => div.innerHTML = html);

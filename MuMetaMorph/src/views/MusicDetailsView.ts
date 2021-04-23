@@ -1,26 +1,36 @@
-﻿import { IViewNavigator } from "../core/render/IViewNavigator";
+﻿import { ITabNavigator, TabNavigator } from "../core/render/ITabNavigator";
+import { IViewNavigator } from "../core/render/IViewNavigator";
 import { View } from "../core/render/View";
 import { getMusicDetailsViewModel } from "../viewModelCollection";
 import { MusicDetailsViewModel } from "./viewModels/MusicDetailsViewModel";
-import { HtmlWidget } from "./widgets/HtmlWidget";
+import { HtmlWidget } from './widgets/HtmlWidget';
 
 export class MusicDetailsView extends View<MusicDetailsViewModel> {
     IMAGE_SIZE = 550;
+    private tabNavigator: ITabNavigator;
     constructor(songId: number, private viewNavigator: IViewNavigator) {
         super();
         this.dataContext = getMusicDetailsViewModel();
         this.renderBody = document.createElement("main");
         this.renderBody.classList.add("main-musicDetails");
+        this.tabNavigator = new TabNavigator();
         this.dataContext.setSongId(songId).then(() => {
             this.displayBanner(this.renderBody);
             let bodyDiv = document.createElement("div");
             bodyDiv.id = "musicDetailsBody";
             this.renderBody.appendChild(bodyDiv);
+            this.dataContext.songEdited = () => {
+                alert("Song Updated");
+                this.refresh();
+            }
             this.displayPluginTabAMenu(bodyDiv);
         });
     }
     private moveHome(): void {
         this.viewNavigator.navigate("Home", null);
+    }
+    private refresh(): void {
+        this.viewNavigator.navigate("MusicDetails", { songId: this.dataContext.songId });
     }
     private displayBanner(html: Element) {
         let bannerDiv = document.createElement("div");
@@ -67,40 +77,31 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
             }
         })
         bannerControlList.appendChild(deleteLink);
+        let exportLink = document.createElement("a");
+        exportLink.textContent = "Export To JSON";
+        exportLink.addEventListener("click", () => {
+            this.dataContext.getSongJson().then(json => {
+                let file = new Blob([json], { type: "text/plain" });
+                let fileDownloader = document.createElement("a");
+                fileDownloader.href = URL.createObjectURL(file);
+                fileDownloader.download = "exportSong.json";
+                fileDownloader.click();
+            });
+        });
+        bannerControlList.appendChild(exportLink);
         bannerDiv.appendChild(bannerControl);
     }
-    private addTabMenuButton(menuDiv: HTMLDivElement, tabName: string): HTMLButtonElement {
-        let tabButton = document.createElement("button");
-        tabButton.classList.add("tablinks");
-        tabButton.textContent = tabName;
-        menuDiv.appendChild(tabButton);
-        return tabButton;
+    private addMainTab(html: Element, menuDiv: HTMLDivElement) {
+        let mainPanel = this.tabNavigator.addTabMenuItem("Main", "mainPanel", true);
+        mainPanel.createElement("h1", h1 => h1.textContent = "This is the main panel");
     }
-    private addTabMenuPanel(html: Element, panelId: string, tabButton: HTMLButtonElement, defaultRenderPanel: boolean = false): HTMLDivElement {
-        let panelTabDiv = document.createElement("div");
-        panelTabDiv.classList.add("tabcontent");
-        if (!defaultRenderPanel) {
-            panelTabDiv.style.display = "none";
-        }
-        panelTabDiv.id = panelId;
-        tabButton.addEventListener("click", (evt) => this.openMenuTab((evt.currentTarget as HTMLButtonElement), panelTabDiv.id));
-        return panelTabDiv;
+    private async addSongPropertiesTab() {
+        let propertiesWidget = this.tabNavigator.addTabMenuItem("Song Properties", "propertiesPanel", false);
+        await this.dataContext.songPropertiesPanel.renderContent(propertiesWidget, null);
     }
-    private addTabMenuItem(html: Element, menuDiv: HTMLDivElement, tabName: string, tabId: string, defaultMenuItem: boolean = false): HtmlWidget {
-        let tabButton = this.addTabMenuButton(menuDiv, tabName);
-        let tabPanel = this.addTabMenuPanel(html, tabId, tabButton, defaultMenuItem);
-        let widget = new HtmlWidget("div", "");
-        widget.shouldAppendChild = true;
-        html.appendChild(tabPanel);
-        tabPanel.appendChild(widget.renderBody);
-        if (defaultMenuItem) {
-            this.openMenuTab(tabButton, tabPanel.id);
-        }
-        return widget;
-    }
-    private async loadPluginPanels(html: Element, menuDiv: HTMLDivElement) {
+    private async loadPluginPanels() {
         for (let panel of this.dataContext.loadedPluginPanels) {
-            let panelWidget = this.addTabMenuItem(html, menuDiv, panel.panelName, panel.panelId);
+            let panelWidget = this.tabNavigator.addTabMenuItem(panel.panelName, panel.panelId, false);
             await panel.renderContent(panelWidget, this.dataContext.getSongMetadataForPlugin(panel.basePlugin.pluginName));
         }
     }
@@ -108,23 +109,14 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         let menuDiv = document.createElement("div");
         html.appendChild(menuDiv);
         menuDiv.classList.add("tab");
-        let mainPanel = this.addTabMenuItem(html, menuDiv, "Main", "mainPanel", true);
-        mainPanel.createElement("h1", h1 => h1.textContent = "This is the main panel");
-        this.loadPluginPanels(html, menuDiv);
+        this.tabNavigator.parentContainer = html;
+        this.tabNavigator.menuDiv = menuDiv;
+        this.addMainTab(html, menuDiv);
+        this.addSongPropertiesTab().then(() => {
+            this.loadPluginPanels();
+        });
     }
-    private openMenuTab(button: HTMLButtonElement, tabId: string) {
-        //Code-taken from https://www.w3schools.com/howto/howto_js_vertical_tabs.asp
-        let tabContent = document.getElementsByClassName("tabcontent");
-        for (let i = 0; i < tabContent.length; i++) {
-            (tabContent[i] as any).style.display = "none";
-        }
-        let tabLinks = document.getElementsByClassName("tablinks");
-        for (let i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabId).style.display = "block";
-        button.className += " active";
-    }
+    
     shouldRender(): boolean {
         return true;
     }

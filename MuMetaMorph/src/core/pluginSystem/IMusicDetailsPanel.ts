@@ -1,4 +1,5 @@
 ﻿import { HtmlWidget } from "../../views/widgets/HtmlWidget";
+import { ISong } from "../music/ISong";
 import { SongMetadata } from "../music/SongMetadata";
 import { IPluginComponent } from "./IPluginComponent";
 
@@ -8,5 +9,6 @@ import { IPluginComponent } from "./IPluginComponent";
 export interface IMusicDetailsPanel extends IPluginComponent {
     panelName: string;
     panelId: string;
+    song: ISong;
     renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void>;
 }

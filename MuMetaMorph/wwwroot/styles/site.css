@@ -16,6 +16,7 @@ nav {
     overflow: hidden;
     position: fixed;
     top: 0;
+    opacity: 0.75;
     width: 100%;
 }
 nav ul {
@@ -102,7 +103,8 @@ label {
     padding: 12px 12px 12px 0;
     display: inline-block;
 }
-form {
+
+.form-center {
     margin: 0 auto;
     width: 50%;
 }
@@ -245,7 +247,7 @@ form {
     float: left;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
-    width: 30%;
+    width: 15%;
     height: 100%;
 }
 
@@ -277,7 +279,7 @@ form {
 .tabcontent {
     float: left;
     padding: 0px 12px;
-    width: 70%;
+    width: 100%;
     border-left: none;
     overflow-y: hidden;
 }
@@ -295,4 +297,41 @@ form {
     .tab {
         width: 100%;
     }
+}
+
+/* https://www.w3schools.com/howto/howto_js_tabs.asp */
+/* Style the tab */
+.tab-horizontal {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab-horizontal button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab-horizontal button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab-horizontal button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent-horizontal {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
 }

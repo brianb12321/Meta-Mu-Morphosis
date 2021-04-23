@@ -5,6 +5,7 @@ import { IFormBuilder } from "../core/render/IFormBuilder";
 import { HtmlWidget } from "../views/widgets/HtmlWidget";
 import { SongMetadata } from "../core/music/SongMetadata";
 import { IMusicDetailsPanel } from "../core/pluginSystem/IMusicDetailsPanel";
+import { ISong } from "../core/music/ISong";
 
 @injectable()
 export class TestPlugin extends PluginBase implements INewSongFormComponent, IMusicDetailsPanel {
@@ -33,6 +34,7 @@ export class TestPlugin extends PluginBase implements INewSongFormComponent, IMu
     get useMusicDetailsPanels(): boolean {
         return true;
     }
+    song: ISong;
 
     basePlugin: PluginBase = this;
     constructor(name: string, friendlyName = "Test Plugin", description = "Does very testy things") {

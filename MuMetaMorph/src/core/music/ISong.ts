@@ -7,6 +7,6 @@ export interface ISong {
     listImageUrl?: string;
     bannerImageUrl?: string;
     audioStreamUrl: string;
-    dateReleased: Date;
+    dateAdded: Date;
     additionalMetadata?: SongMetadata[];
 }
