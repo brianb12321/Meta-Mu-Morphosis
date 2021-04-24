@@ -5,17 +5,20 @@ import { IConfigurationManager } from "../configuration/IConfigurationManager";
 import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
 import { IStartupItem } from "./IStartupItem";
 import { IThemeManager } from "../render/theme/IThemeManager";
-import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem, TSongManager } from "../../globalSymbols";
+import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem, TSongManager, TBlobResourceManager } from "../../globalSymbols";
 import { ServiceExtensions } from "../../serviceExtensions";
 import { MainView } from "../../views/mainView";
 import { ISongManager } from "../music/ISongManager";
 import { SongManager } from "../music/SongManager";
 import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurationDatabase";
+import { BlobResourceManager } from "../resourceSystem/BlobResourceManager";
+import { IBlobResourceManager } from "../resourceSystem/IBlobResourceManager";
 
 @injectable()
 export class DefaultApplication implements IApplication {
     private logger: ILogger;
     private configurationManager: IConfigurationManager;
+    private blobResourceManager: IBlobResourceManager;
     private database: MMMConfigurationDatabase;
     private songManager: ISongManager;
     constructor() {
@@ -25,10 +28,10 @@ export class DefaultApplication implements IApplication {
         if (containerBuilder != null) {
             containerBuilder(new ServiceExtensions(this));
         }
-        //We are going to attempt to add a logger and configuration manager to the container
         container.registerInstance(TLogger, this.logger);
         container.registerInstance(TConfigManager, this.configurationManager);
         container.registerInstance(TSongManager, this.songManager);
+        container.registerInstance(TBlobResourceManager, this.blobResourceManager);
         return this;
     }
     addLogger(logger: ILogger): IApplication {
@@ -58,6 +61,15 @@ export class DefaultApplication implements IApplication {
             this.configurationManager = new IndexDbConfigurationManager(this.logger, this.database);
         }
         
+        return this;
+    }
+    addBlobResourceManager(blobResourceManagerBuilder: Function): IApplication {
+        if (blobResourceManagerBuilder != null) {
+            this.blobResourceManager = blobResourceManagerBuilder();
+        } else {
+            this.blobResourceManager = new BlobResourceManager(this.logger, this.database);
+        }
+
         return this;
     }
     async initializeStartupItems() {

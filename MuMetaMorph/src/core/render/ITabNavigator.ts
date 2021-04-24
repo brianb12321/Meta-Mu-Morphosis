@@ -10,12 +10,17 @@ export interface ITabNavigator {
     panelClassName: string;
     addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean): HtmlWidget;
 }
+
 export class TabNavigator implements ITabNavigator {
     parentContainer: Element;
     menuDiv: HTMLDivElement;
+    tabs: Tab[];
     panelClassName: string = "tabcontent";
     buttonClassName: string = "tablinks";
 
+    constructor() {
+        this.tabs = [];
+    }
     private addTabMenuButton(menuDiv: HTMLDivElement, tabName: string): HTMLButtonElement {
         let tabButton = document.createElement("button");
         tabButton.classList.add(this.buttonClassName);
@@ -35,15 +40,13 @@ export class TabNavigator implements ITabNavigator {
     }
     private openMenuTab(button: HTMLButtonElement, tabId: string) {
         //Code-taken from https://www.w3schools.com/howto/howto_js_vertical_tabs.asp
-        let tabContent = document.getElementsByClassName(this.panelClassName);
-        for (let i = 0; i < tabContent.length; i++) {
-            (tabContent[i] as any).style.display = "none";
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].tabPanel.style.display = "none";
         }
-        let tabLinks = document.getElementsByClassName(this.buttonClassName);
-        for (let i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].tabButton.className = this.tabs[i].tabButton.className.replace(" active", "");
         }
-        document.getElementById(tabId).style.display = "block";
+        this.tabs.find(tab => tab.tabPanel.id === tabId).tabPanel.style.display = "block";
         button.className += " active";
     }
 
@@ -54,9 +57,14 @@ export class TabNavigator implements ITabNavigator {
         widget.shouldAppendChild = true;
         this.parentContainer.appendChild(tabPanel);
         tabPanel.appendChild(widget.renderBody);
+        this.tabs.push({ tabButton: tabButton, tabPanel: tabPanel });
         if (defaultMenuItem) {
             this.openMenuTab(tabButton, tabPanel.id);
         }
         return widget;
     }
+}
+interface Tab {
+    tabButton: HTMLButtonElement;
+    tabPanel: HTMLDivElement;
 }

@@ -4,6 +4,7 @@ import { ITabNavigator } from "../core/render/ITabNavigator";
 import { IViewNavigator } from "../core/render/IViewNavigator";
 import { View } from "../core/render/View";
 import { getAddNewSongViewModel } from "../viewModelCollection";
+import { BrowseResourceModalDialogBox } from "./modalDialogBoxes/BrowseResourceModalDialogBox";
 import { AddNewSongViewModel } from "./viewModels/AddNewSongViewModel";
 import { AccordionWidget } from "./widgets/AccordionWidget";
 import { CardGridWidget } from "./widgets/CardGridWidget";
@@ -14,6 +15,8 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         super();
         this.dataContext = getAddNewSongViewModel();
         let mainElement = document.createElement("main");
+
+        
         mainElement.classList.add("main");
         let html = new HtmlWidget("form", "");
         (html.renderBody as HTMLFormElement).autocomplete = "off";
@@ -23,6 +26,7 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         accordion.accordionAdded = (section) => this.dataContext.accordionSections.push(section);
         let importJsonPanel = accordion.addAccordionSection("Import Song From JSON", false, null).panel;
         let importJsonForm = new HtmlWidgetFormBuilder(importJsonPanel);
+        let browseModalDialog = new BrowseResourceModalDialogBox(html.renderBody);
         importJsonForm.addParagraph("You have the ability to import a song from a JSON file.")
             .addFileInput("JSON File", "jsonFileInput", false, fileInput => {
                 fileInput.accept = ".json";
@@ -56,7 +60,9 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
                 div.textContent =
                     "WARNING: the image will be resized to fit the banner width. Any image size is allowed.";
             })
-            .addUrlInput("URL To Audio", "urlInput", true);
+            .addResourceInput("URL To Audio", "urlInput", true, (input) => {
+                browseModalDialog.showDialog();
+            });
         let cardGrid = new CardGridWidget();
         html.widgets.push(cardGrid);
         this.renderCards(cardGrid, accordion);
@@ -88,6 +94,7 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         this.renderBody = mainElement;
         this.widgets.push(html);
     }
+
     private populateFormData(accordion: AccordionWidget) {
         for (let section of this.dataContext.accordionSections) {
             //Run code if section is associated with a plugin.

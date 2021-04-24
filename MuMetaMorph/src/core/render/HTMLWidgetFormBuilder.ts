@@ -2,7 +2,6 @@
 import { IFormBuilder } from "./IFormBuilder";
 
 export class HtmlWidgetFormBuilder implements IFormBuilder {
-
     constructor(private form: HtmlWidget, private appendChild: boolean = false) {
 
     }
@@ -37,6 +36,35 @@ export class HtmlWidgetFormBuilder implements IFormBuilder {
     }
     addUrlInput(label: string, inputId: string, required: boolean, elementBuilder?: (element: HTMLInputElement) => void): IFormBuilder {
         let input = this.addInput(label, inputId, "url", required);
+        if (elementBuilder != null) elementBuilder(input);
+        return this;
+    }
+    addResourceInput(label: string,
+        inputId: string,
+        required: boolean,
+        browseButtonClicked: (urlInput: HTMLInputElement) => void,
+        elementBuilder?: (element: HTMLInputElement) => void): IFormBuilder {
+        let row = this.form.createElement("div", div => div.classList.add("row"), this.appendChild);
+        let input: HTMLInputElement;
+        row.createElement("div", div => div.classList.add("col-25"))
+            .createElementAndAppend("label", element => {
+                let labelElement = element as HTMLLabelElement;
+                labelElement.textContent = label;
+                labelElement.htmlFor = inputId;
+            });
+        row.createElement("div", div => div.classList.add("col-75"))
+            .createElementAndAppend("button", button => {
+                button.classList.add("btn");
+                button.textContent = "Browse";
+                button.addEventListener("click", () => browseButtonClicked(input));
+            })
+            .createElementAndAppend("input", element => {
+                input = element as HTMLInputElement;
+                element.classList.add("input-search");
+                input.type = "url";
+                input.required = required;
+                input.id = inputId;
+            });
         if (elementBuilder != null) elementBuilder(input);
         return this;
     }

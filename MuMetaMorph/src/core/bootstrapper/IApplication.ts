@@ -8,5 +8,6 @@ export interface IApplication {
     useDatabase(databaseBuilder: Function): IApplication;
     addConfigurationManager(configBuilder: Function): IApplication;
     addSongManager(songManagerBuilder: Function): IApplication;
+    addBlobResourceManager(blobResourceManagerBuilder: Function): IApplication;
     addLogger(logger: ILogger): IApplication;
 }

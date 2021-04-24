@@ -12,6 +12,7 @@ const application = new DefaultApplication()
     .useDatabase(null)
     .addConfigurationManager(null)
     .addSongManager(null)
+    .addBlobResourceManager(null)
     .configureContainer((extensions) => {
         extensions.addThemeManager();
         addViewModels();

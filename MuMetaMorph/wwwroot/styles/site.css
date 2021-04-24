@@ -6,10 +6,12 @@
     margin: 10px;
     margin-top: 49px;
     overflow-y: auto;
+    padding-bottom: 50px;
 }
 .main-musicDetails {
     overflow-y: auto;
     margin-top: 39px;
+    padding-bottom: 50px;
 }
 nav {
     background-color: blue;
@@ -69,7 +71,7 @@ table th {
     color: white;
     border: 0;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 3px;
 }
 .btn-submit {
     padding: 12px 20px;
@@ -285,7 +287,6 @@ label {
 }
 #musicDetailsBody {
     display: flex;
-    padding-bottom: 50px;
 }
 @media screen and (max-width: 600px) {
     #musicDetailsBody {
@@ -334,4 +335,63 @@ label {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+/* https://www.w3schools.com/howto/howto_css_modals.asp */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+.modal-body {
+    display: flex;
+    padding: 0;
+    padding-top: 10px;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

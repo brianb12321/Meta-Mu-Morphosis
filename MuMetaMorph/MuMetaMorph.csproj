@@ -21,6 +21,9 @@
     <None Remove="src\core\render\ITabNavigator.ts" />
     <None Remove="src\core\render\IViewNavigator.ts" />
     <None Remove="src\core\render\RelayCommand.ts" />
+    <None Remove="src\core\resourceSystem\BlobResourceManager.ts" />
+    <None Remove="src\core\resourceSystem\IBlobResource.ts" />
+    <None Remove="src\core\resourceSystem\IBlobResourceManager.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlPanel.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
@@ -29,6 +32,7 @@
     <None Remove="src\views\AddNewSongView.ts" />
     <None Remove="src\views\defaultPanels\SongPropertiesPanel.ts" />
     <None Remove="src\views\HomeView.ts" />
+    <None Remove="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
     <None Remove="src\views\MusicDetailsView.ts" />
     <None Remove="src\views\PlayerView.ts" />
     <None Remove="src\views\viewModels\AddNewSongViewModel.ts" />
@@ -47,6 +51,7 @@
     <None Remove="src\views\widgets\HeadingWidget.ts" />
     <None Remove="src\views\widgets\HtmlWidget.ts" />
     <None Remove="src\views\widgets\InputWidget.ts" />
+    <None Remove="src\views\widgets\ModalDialogWidget.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,6 +78,9 @@
     <TypeScriptCompile Include="src\core\render\IViewNavigator.ts" />
     <TypeScriptCompile Include="src\core\render\RelayCommand.ts" />
     <TypeScriptCompile Include="src\core\render\Widget.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\BlobResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\IBlobResource.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\IBlobResourceManager.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPanel.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
@@ -81,6 +89,7 @@
     <TypeScriptCompile Include="src\views\AddNewSongView.ts" />
     <TypeScriptCompile Include="src\views\defaultPanels\SongPropertiesPanel.ts" />
     <TypeScriptCompile Include="src\views\HomeView.ts" />
+    <TypeScriptCompile Include="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
     <TypeScriptCompile Include="src\views\MusicDetailsView.ts" />
     <TypeScriptCompile Include="src\views\PlayerView.ts" />
     <TypeScriptCompile Include="src\views\viewModels\AddNewSongViewModel.ts" />
@@ -104,6 +113,7 @@
     <TypeScriptCompile Include="src\views\widgets\HeadingWidget.ts" />
     <TypeScriptCompile Include="src\views\NavBarView.ts" />
     <TypeScriptCompile Include="src\views\widgets\HtmlWidget.ts" />
+    <TypeScriptCompile Include="src\core\render\ModalDialog.ts" />
   </ItemGroup>
 
   <ItemGroup>
