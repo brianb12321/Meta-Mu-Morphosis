@@ -9,6 +9,7 @@ import { MusicDetailsViewModel } from "../viewModels/MusicDetailsViewModel";
 import { AccordionWidget, AccordionSection } from "../widgets/AccordionWidget";
 import { CardGridWidget } from "../widgets/CardGridWidget";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
+import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
 
 export class SongProeprtiesPanel implements IMusicDetailsPanel {
     public get panelName(): string { return "Song Properties"; }
@@ -19,13 +20,15 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
     private formData: any;
     supportedPluginComponents: INewSongFormComponent[];
     pluginsAdded: INewSongFormComponent[];
+    editComponents: IEditSongFormComponent[];
     accordionSections: AccordionSection[];
     constructor(private viewModel: MusicDetailsViewModel) {
         this.supportedPluginComponents = [];
         this.pluginsAdded = [];
         this.formData = {};
         this.accordionSections = [];
-        for (let notLoadedPlugin of viewModel.plugins.filter(plugin => viewModel.loadedPluginNames.includes(plugin.pluginName) === false)) {
+        this.editComponents = [];
+        for (let notLoadedPlugin of viewModel.plugins.filter(plugin => viewModel.loadedPlugins.map(pluginObj => pluginObj.pluginName).includes(plugin.pluginName) === false)) {
             //Do not add plugins that are already added to a song.
             if (notLoadedPlugin.useNewSongForm) {
                 this.supportedPluginComponents.push(notLoadedPlugin.getNewSongFormComponent());
@@ -35,25 +38,26 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         this.tabNavigator = new TabNavigator();
         content.createElement("h1", h1 => h1.textContent = `Song Properties for ${this.song.name}`);
-        content.createElement("div",
-                parentDiv => {
-                    this.tabNavigator.parentContainer = parentDiv;
-                })
-            .createElement("div",
-                div => {
-                    let menuDiv = div as HTMLDivElement;
-                    menuDiv.classList.add("tab-horizontal");
-                    this.tabNavigator.menuDiv = menuDiv;
-                    this.tabNavigator.buttonClassName = "tablinks-song-properties";
-                    this.tabNavigator.panelClassName = "tabcontent-horizontal";
-                });
+        let form = content.createElement("form", parentDiv => {
+                this.tabNavigator.parentContainer = parentDiv;
+            });
+        form.createElement("div",
+            div => {
+                let menuDiv = div as HTMLDivElement;
+                menuDiv.classList.add("tab-horizontal");
+                this.tabNavigator.menuDiv = menuDiv;
+                this.tabNavigator.buttonClassName = "tablinks-song-properties";
+                this.tabNavigator.panelClassName = "tabcontent-horizontal";
+            });
 
-        let mainPanel = this.tabNavigator.addTabMenuItem("Main", "main", true);
-        let form = mainPanel.createElement("form", form => form.classList.add("form-container"));
+        let mainPanel = this.addTab("Main", "main", true, null);
+        this.addPluginTabItems();
+        mainPanel.renderBody.classList.add("form-container");
+/*        let form = mainPanel.createElement("form", form => form.classList.add("form-container"));*/
         let accordion = new AccordionWidget();
         accordion.accordionAdded = (section) => this.accordionSections.push(section);
         //Since a music-detail panel is not type widget. We will hook up the HTML element manually.
-        form.renderBody.appendChild(accordion.renderBody);
+        mainPanel.renderBody.appendChild(accordion.renderBody);
         let editSongAccordionPanel = accordion.addAccordionSection("Edit Song", true, null);
         let formBuilder = new HtmlWidgetFormBuilder(editSongAccordionPanel.panel, true);
         formBuilder.addTextInput("Song Name", "songNameInput", true, input => input.value = this.song.name)
@@ -66,9 +70,9 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
             })
             .addUrlInput("URL To Audio", "urlInput", true, input => input.value = this.song.audioStreamUrl);
         let cardGrid = new CardGridWidget();
-        form.renderBody.appendChild(cardGrid.renderBody);
+        mainPanel.renderBody.appendChild(cardGrid.renderBody);
         this.renderCards(cardGrid, accordion);
-        mainPanel.createElement("button", button => {
+        form.createElement("button", button => {
             button.classList.add("btn");
             button.classList.add("btn-submit");
             button.style.marginTop = "10px";
@@ -79,15 +83,32 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
                     return;
                 }
                 this.formData.main = {};
-                this.formData.main.songName = (form.element.querySelector("div #songNameInput") as HTMLInputElement).value;
-                this.formData.main.artist = (form.element.querySelector("div #artistInput") as HTMLInputElement).value;
+                this.formData.main.songName = (mainPanel.element.querySelector("div #songNameInput") as HTMLInputElement).value;
+                this.formData.main.artist = (mainPanel.element.querySelector("div #artistInput") as HTMLInputElement).value;
                 this.formData.main.songImageUrl =
-                    (form.element.querySelector("div #songImageInput") as HTMLInputElement).value;
-                this.formData.main.audioStreamUrl = (form.element.querySelector("div #urlInput") as HTMLInputElement).value;
+                    (mainPanel.element.querySelector("div #songImageInput") as HTMLInputElement).value;
+                this.formData.main.audioStreamUrl = (mainPanel.element.querySelector("div #urlInput") as HTMLInputElement).value;
                 this.populateFormData(accordion);
-                await this.viewModel.updateSong(this.pluginsAdded, this.formData);
+                this.populateFormDataAcrossTabs();
+                await this.viewModel.updateSong(this.pluginsAdded, this.editComponents, this.formData);
             });
         });
+    }
+    private addTab(tabName: string, tabId: string, defaultTab: boolean, component: IEditSongFormComponent): HtmlWidget {
+        return this.tabNavigator.addTabMenuItem(tabName, tabId, defaultTab, component);
+    }
+    private addPluginTabItems() {
+        for (let plugin of this.viewModel.loadedPlugins) {
+            if (plugin.useNewSongForm) {
+                let editSongTabItem = plugin.getEditSongFormComponent();
+                if (editSongTabItem != null) {
+                    let pluginTab = this.addTab(editSongTabItem.basePlugin.friendlyPluginName, editSongTabItem.basePlugin.pluginName, false, editSongTabItem);
+                    editSongTabItem.addEditSongForm(new HtmlWidgetFormBuilder(pluginTab, true), this.viewModel.getSongMetadataForPlugin(editSongTabItem.basePlugin.pluginName));
+                    this.editComponents.push(editSongTabItem);
+                    this.formData[editSongTabItem.basePlugin.pluginName] = {};
+                }
+            }
+        }
     }
     private populateFormData(accordion: AccordionWidget) {
         for (let section of this.accordionSections) {
@@ -97,6 +118,18 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
                 for (let j = 0; j < inputs.length; j++) {
                     let inputElement = inputs[j] as HTMLInputElement;
                     this.formData[(section.additionalData as INewSongFormComponent).basePlugin.pluginName][inputElement.id] = inputElement.value;
+                }
+            }
+        }
+    }
+    private populateFormDataAcrossTabs() {
+        for (let tab of this.tabNavigator.tabs) {
+            //Run code if section is associated with a plugin.
+            if (tab.additionalData != null) {
+                let inputs = tab.tabPanel.querySelectorAll(".input-search");
+                for (let j = 0; j < inputs.length; j++) {
+                    let inputElement = inputs[j] as HTMLInputElement;
+                    this.formData[(tab.additionalData as IEditSongFormComponent).basePlugin.pluginName][inputElement.id] = inputElement.value;
                 }
             }
         }

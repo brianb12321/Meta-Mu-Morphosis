@@ -8,12 +8,13 @@ import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { SongProeprtiesPanel } from "../defaultPanels/SongPropertiesPanel";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { SongMetadata } from "../../core/music/SongMetadata";
+import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
 
 @injectable()
 export class MusicDetailsViewModel extends BaseViewModel {
     private song: ISong;
     public loadedPluginPanels: IMusicDetailsPanel[];
-    public loadedPluginNames: string[];
+    public loadedPlugins: PluginBase[];
     public songPropertiesPanel: IMusicDetailsPanel;
     public songEdited: Function;
     public get songId(): number {
@@ -26,9 +27,9 @@ export class MusicDetailsViewModel extends BaseViewModel {
         this.song = await this.songManager.getSongById(value);
         //Load panels.
         this.loadedPluginPanels = [];
-        this.loadedPluginNames = [];
+        this.loadedPlugins = [];
         for (let plugin of this.plugins.filter(filterPlugin => this.song.pluginsUsed.includes(filterPlugin.pluginName))) {
-            this.loadedPluginNames.push(plugin.pluginName);
+            this.loadedPlugins.push(plugin);
             if (plugin.useMusicDetailsPanels) {
                 for (let panel of plugin.getMusicDetailPanels()) {
                     panel.song = this.song;
@@ -40,7 +41,7 @@ export class MusicDetailsViewModel extends BaseViewModel {
         this.songPropertiesPanel = new SongProeprtiesPanel(this);
         this.songPropertiesPanel.song = this.song;
     }
-    async updateSong(pluginsAdded: INewSongFormComponent[], updateFormData: any): Promise<void> {
+    async updateSong(pluginsAdded: INewSongFormComponent[], editComponents: IEditSongFormComponent[], updateFormData: any): Promise<void> {
         this.song.name = updateFormData.main.songName as string;
         this.song.audioStreamUrl = updateFormData.main.audioStreamUrl as string;
         this.song.bannerImageUrl = updateFormData.main.songImageUrl;
@@ -54,6 +55,11 @@ export class MusicDetailsViewModel extends BaseViewModel {
                 throw Error(`${component.basePlugin.pluginName} failed to add metadata to the database. Aborting...`);
             }
             this.song.additionalMetadata.push(metadata);
+        }
+        for (let editComponent of editComponents) {
+            if (!editComponent.saveSong(updateFormData[editComponent.basePlugin.pluginName], this.getSongMetadataForPlugin(editComponent.basePlugin.pluginName))) {
+                throw Error(`${editComponent.basePlugin.pluginName} failed to edit metadata to the database. Aborting...`);
+            }
         }
         await this.songManager.putSong(this.songId, this.song);
         this.songEdited();

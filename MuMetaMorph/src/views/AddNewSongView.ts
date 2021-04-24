@@ -15,8 +15,6 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         super();
         this.dataContext = getAddNewSongViewModel();
         let mainElement = document.createElement("main");
-
-        
         mainElement.classList.add("main");
         let html = new HtmlWidget("form", "");
         (html.renderBody as HTMLFormElement).autocomplete = "off";

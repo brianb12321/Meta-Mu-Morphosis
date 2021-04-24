@@ -43,7 +43,7 @@ export class SongManager implements ISongManager {
             name: jsonObject.name,
             dateAdded: new Date(Date.now()),
             bannerImageUrl: jsonObject.bannerImageUrl,
-            audioStreamUrl: jsonObject.audStreamUrl,
+            audioStreamUrl: jsonObject.audioStreamUrl,
             pluginsUsed: jsonObject.pluginsUsed,
             additionalMetadata: jsonObject.additionalMetadata
         };

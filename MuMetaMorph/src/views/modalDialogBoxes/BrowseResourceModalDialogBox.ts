@@ -17,7 +17,7 @@ export class BrowseResourceModalDialogBox extends ModalDialog {
         });
         this.tabNavigator.parentContainer = this.modalBody.renderBody;
         this.tabNavigator.menuDiv = menuDiv.renderBody as HTMLDivElement;
-        let urlTab = this.tabNavigator.addTabMenuItem("URL", "urlTab", true);
+        let urlTab = this.tabNavigator.addTabMenuItem("URL", "urlTab", true, null);
         urlTab.createElement("p", p => p.textContent = "Use a Universal Resource Locator address");
     }
     private createCloseButton(): void {

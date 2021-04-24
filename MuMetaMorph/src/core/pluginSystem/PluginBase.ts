@@ -1,4 +1,5 @@
 ﻿///Represents the entry-point of a plugin.
+import { IEditSongFormComponent } from "./IEditSongFormComponent";
 import { IMusicDetailsPanel } from "./IMusicDetailsPanel";
 import { INewSongFormComponent } from "./INewSongFormComponent";
 
@@ -9,6 +10,9 @@ export abstract class PluginBase {
     public abstract get useNewSongForm(): boolean;
     public abstract get useMusicDetailsPanels(): boolean;
     getNewSongFormComponent(): INewSongFormComponent {
+        return null;
+    }
+    getEditSongFormComponent(): IEditSongFormComponent {
         return null;
     }
     getMusicDetailPanels(): IMusicDetailsPanel[] {

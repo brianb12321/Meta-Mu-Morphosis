@@ -10,6 +10,7 @@
     <None Remove="src\core\music\ISongManager.ts" />
     <None Remove="src\core\music\SongManager.ts" />
     <None Remove="src\core\music\SongMetadata.ts" />
+    <None Remove="src\core\pluginSystem\IEditSongFormComponent.ts" />
     <None Remove="src\core\pluginSystem\IMusicDetailsPanel.ts" />
     <None Remove="src\core\pluginSystem\INewSongFormComponent.ts" />
     <None Remove="src\core\pluginSystem\IPluginComponent.ts" />
@@ -67,6 +68,9 @@
     <TypeScriptCompile Include="src\core\music\SongManager.ts" />
     <TypeScriptCompile Include="src\core\music\SongMetadata.ts" />
     <TypeScriptCompile Include="src\core\pluginSystem\IMusicDetailsPanel.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IEditSongFormComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\core\pluginSystem\INewSongFormComponent.ts" />
     <TypeScriptCompile Include="src\core\pluginSystem\IPluginComponent.ts" />
     <TypeScriptCompile Include="src\core\pluginSystem\PluginBase.ts" />
@@ -165,6 +169,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="src\core\pluginSystem\INewSongFormComponent - Copy.js">
+      <DependentUpon>INewSongFormComponent.js</DependentUpon>
+    </None>
+    <None Update="src\core\pluginSystem\INewSongFormComponent - Copy.js.map">
+      <DependentUpon>INewSongFormComponent.js.map</DependentUpon>
+    </None>
     <None Update="src\views\widgets\HeadingWidget - Copy.js">
       <DependentUpon>HeadingWidget.js</DependentUpon>
     </None>

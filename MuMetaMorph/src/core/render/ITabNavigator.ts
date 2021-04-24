@@ -6,15 +6,18 @@
 export interface ITabNavigator {
     parentContainer: Element;
     menuDiv: HTMLDivElement;
+    tabs: Tab[];
+    bodyElementType: string;
     buttonClassName: string;
     panelClassName: string;
-    addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean): HtmlWidget;
+    addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean, additionalData: any): HtmlWidget;
 }
 
 export class TabNavigator implements ITabNavigator {
     parentContainer: Element;
     menuDiv: HTMLDivElement;
     tabs: Tab[];
+    bodyElementType: string = "div";
     panelClassName: string = "tabcontent";
     buttonClassName: string = "tablinks";
 
@@ -28,8 +31,8 @@ export class TabNavigator implements ITabNavigator {
         menuDiv.appendChild(tabButton);
         return tabButton;
     }
-    private addTabMenuPanel(html: Element, panelId: string, tabButton: HTMLButtonElement, defaultRenderPanel: boolean = false): HTMLDivElement {
-        let panelTabDiv = document.createElement("div");
+    private addTabMenuPanel(html: Element, panelId: string, tabButton: HTMLButtonElement, defaultRenderPanel: boolean = false): HTMLElement {
+        let panelTabDiv = document.createElement(this.bodyElementType);
         panelTabDiv.classList.add(this.panelClassName);
         if (!defaultRenderPanel) {
             panelTabDiv.style.display = "none";
@@ -50,21 +53,22 @@ export class TabNavigator implements ITabNavigator {
         button.className += " active";
     }
 
-    addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean): HtmlWidget {
+    addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean, additionalData: any): HtmlWidget {
         let tabButton = this.addTabMenuButton(this.menuDiv, tabName);
         let tabPanel = this.addTabMenuPanel(this.parentContainer, tabId, tabButton, defaultMenuItem);
         let widget = new HtmlWidget("div", "");
         widget.shouldAppendChild = true;
         this.parentContainer.appendChild(tabPanel);
         tabPanel.appendChild(widget.renderBody);
-        this.tabs.push({ tabButton: tabButton, tabPanel: tabPanel });
+        this.tabs.push({ tabButton: tabButton, tabPanel: tabPanel, additionalData: additionalData });
         if (defaultMenuItem) {
             this.openMenuTab(tabButton, tabPanel.id);
         }
         return widget;
     }
 }
-interface Tab {
+export interface Tab {
     tabButton: HTMLButtonElement;
-    tabPanel: HTMLDivElement;
+    tabPanel: HTMLElement;
+    additionalData: any;
 }

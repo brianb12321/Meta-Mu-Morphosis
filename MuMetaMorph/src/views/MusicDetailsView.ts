@@ -92,16 +92,16 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         bannerDiv.appendChild(bannerControl);
     }
     private addMainTab(html: Element, menuDiv: HTMLDivElement) {
-        let mainPanel = this.tabNavigator.addTabMenuItem("Main", "mainPanel", true);
+        let mainPanel = this.tabNavigator.addTabMenuItem("Main", "mainPanel", true, null);
         mainPanel.createElement("h1", h1 => h1.textContent = "This is the main panel");
     }
     private async addSongPropertiesTab() {
-        let propertiesWidget = this.tabNavigator.addTabMenuItem("Song Properties", "propertiesPanel", false);
+        let propertiesWidget = this.tabNavigator.addTabMenuItem("Song Properties", "propertiesPanel", false, this.dataContext.songPropertiesPanel);
         await this.dataContext.songPropertiesPanel.renderContent(propertiesWidget, null);
     }
     private async loadPluginPanels() {
         for (let panel of this.dataContext.loadedPluginPanels) {
-            let panelWidget = this.tabNavigator.addTabMenuItem(panel.panelName, panel.panelId, false);
+            let panelWidget = this.tabNavigator.addTabMenuItem(panel.panelName, panel.panelId, false, panel);
             await panel.renderContent(panelWidget, this.dataContext.getSongMetadataForPlugin(panel.basePlugin.pluginName));
         }
     }

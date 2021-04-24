@@ -6,9 +6,10 @@ import { HtmlWidget } from "../views/widgets/HtmlWidget";
 import { SongMetadata } from "../core/music/SongMetadata";
 import { IMusicDetailsPanel } from "../core/pluginSystem/IMusicDetailsPanel";
 import { ISong } from "../core/music/ISong";
+import { IEditSongFormComponent } from "../core/pluginSystem/IEditSongFormComponent";
 
 @injectable()
-export class TestPlugin extends PluginBase implements INewSongFormComponent, IMusicDetailsPanel {
+export class TestPlugin extends PluginBase implements INewSongFormComponent, IMusicDetailsPanel, IEditSongFormComponent {
     private _name: string;
     private _friendlyName: string;
     private _description: string;
@@ -49,9 +50,16 @@ export class TestPlugin extends PluginBase implements INewSongFormComponent, IMu
     getMusicDetailPanels(): IMusicDetailsPanel[] {
         return [this];
     }
+    getEditSongFormComponent(): IEditSongFormComponent {
+        return this;
+    }
     addForm(formBuilder: IFormBuilder): void {
         formBuilder.addParagraph("Please enter additional data you wish to save.");
         formBuilder.addTextInput("Additional Data", "additionalDataId", false);
+    }
+    addEditSongForm(formBuilder: IFormBuilder, metadata: SongMetadata) {
+        formBuilder.addParagraph("Please enter additional data you wish to save.");
+        formBuilder.addTextInput("Additional Data", "additionalDataId", false, input => input.value = metadata.value["additionalData"]);
     }
     saveSong(formData: any, metadata: SongMetadata): boolean {
         let additionalData = formData["additionalDataId"];
