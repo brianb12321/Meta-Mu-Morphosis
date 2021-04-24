@@ -1,4 +1,5 @@
 ﻿import { injectable } from "tsyringe";
+import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
 import { IMusicDetailsPanel } from "../../core/pluginSystem/IMusicDetailsPanel";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
@@ -21,5 +22,8 @@ export class HtmlPlugin extends PluginBase {
     }
     getMusicDetailPanels(): IMusicDetailsPanel[] {
         return [new HtmlPanel(this)];
+    }
+    getEditSongFormComponent(): IEditSongFormComponent {
+        return new HtmlFormComponent(this);
     }
 }

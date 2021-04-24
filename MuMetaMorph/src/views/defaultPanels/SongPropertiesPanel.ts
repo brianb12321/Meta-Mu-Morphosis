@@ -38,10 +38,12 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         this.tabNavigator = new TabNavigator();
         content.createElement("h1", h1 => h1.textContent = `Song Properties for ${this.song.name}`);
-        let form = content.createElement("form", parentDiv => {
-                this.tabNavigator.parentContainer = parentDiv;
-            });
-        form.createElement("div",
+        let form = content.createElement("form", parentDiv => {});
+        let tabContainer = form.createElement("div", div => {
+            div.classList.add("tab-horizontal-container");
+            this.tabNavigator.parentContainer = div;
+        });
+        tabContainer.createElement("div",
             div => {
                 let menuDiv = div as HTMLDivElement;
                 menuDiv.classList.add("tab-horizontal");
@@ -53,7 +55,6 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
         let mainPanel = this.addTab("Main", "main", true, null);
         this.addPluginTabItems();
         mainPanel.renderBody.classList.add("form-container");
-/*        let form = mainPanel.createElement("form", form => form.classList.add("form-container"));*/
         let accordion = new AccordionWidget();
         accordion.accordionAdded = (section) => this.accordionSections.push(section);
         //Since a music-detail panel is not type widget. We will hook up the HTML element manually.
@@ -126,7 +127,7 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
         for (let tab of this.tabNavigator.tabs) {
             //Run code if section is associated with a plugin.
             if (tab.additionalData != null) {
-                let inputs = tab.tabPanel.querySelectorAll(".input-search");
+                let inputs = tab.tabPanel.element.querySelectorAll(".input-search");
                 for (let j = 0; j < inputs.length; j++) {
                     let inputElement = inputs[j] as HTMLInputElement;
                     this.formData[(tab.additionalData as IEditSongFormComponent).basePlugin.pluginName][inputElement.id] = inputElement.value;

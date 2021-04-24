@@ -31,44 +31,46 @@ export class TabNavigator implements ITabNavigator {
         menuDiv.appendChild(tabButton);
         return tabButton;
     }
-    private addTabMenuPanel(html: Element, panelId: string, tabButton: HTMLButtonElement, defaultRenderPanel: boolean = false): HTMLElement {
-        let panelTabDiv = document.createElement(this.bodyElementType);
-        panelTabDiv.classList.add(this.panelClassName);
+    private addTabMenuPanel(html: Element, panelId: string, tabButton: HTMLButtonElement, defaultRenderPanel: boolean = false): HtmlWidget {
+        let panelTabDiv = new HtmlWidget(this.bodyElementType, "");
+        panelTabDiv.shouldAppendChild = true;
+        panelTabDiv.renderBody.classList.add(this.panelClassName);
         if (!defaultRenderPanel) {
-            panelTabDiv.style.display = "none";
+            panelTabDiv.element.style.display = "none";
         }
-        panelTabDiv.id = panelId;
-        tabButton.addEventListener("click", (evt) => this.openMenuTab((evt.currentTarget as HTMLButtonElement), panelTabDiv.id));
+        panelTabDiv.renderBody.id = panelId;
+        tabButton.addEventListener("click", (evt) => {
+            //Prevent the page from scrolling to the top.
+            evt.preventDefault();
+            this.openMenuTab((evt.currentTarget as HTMLButtonElement), panelTabDiv.renderBody.id);
+        });
         return panelTabDiv;
     }
     private openMenuTab(button: HTMLButtonElement, tabId: string) {
         //Code-taken from https://www.w3schools.com/howto/howto_js_vertical_tabs.asp
         for (let i = 0; i < this.tabs.length; i++) {
-            this.tabs[i].tabPanel.style.display = "none";
+            this.tabs[i].tabPanel.element.style.display = "none";
         }
         for (let i = 0; i < this.tabs.length; i++) {
             this.tabs[i].tabButton.className = this.tabs[i].tabButton.className.replace(" active", "");
         }
-        this.tabs.find(tab => tab.tabPanel.id === tabId).tabPanel.style.display = "block";
+        this.tabs.find(tab => tab.tabPanel.element.id === tabId).tabPanel.element.style.display = "block";
         button.className += " active";
     }
 
     addTabMenuItem(tabName: string, tabId: string, defaultMenuItem: boolean, additionalData: any): HtmlWidget {
         let tabButton = this.addTabMenuButton(this.menuDiv, tabName);
         let tabPanel = this.addTabMenuPanel(this.parentContainer, tabId, tabButton, defaultMenuItem);
-        let widget = new HtmlWidget("div", "");
-        widget.shouldAppendChild = true;
-        this.parentContainer.appendChild(tabPanel);
-        tabPanel.appendChild(widget.renderBody);
+        this.parentContainer.appendChild(tabPanel.element);
         this.tabs.push({ tabButton: tabButton, tabPanel: tabPanel, additionalData: additionalData });
         if (defaultMenuItem) {
-            this.openMenuTab(tabButton, tabPanel.id);
+            this.openMenuTab(tabButton, tabPanel.element.id);
         }
-        return widget;
+        return tabPanel;
     }
 }
 export interface Tab {
     tabButton: HTMLButtonElement;
-    tabPanel: HTMLElement;
+    tabPanel: HtmlWidget;
     additionalData: any;
 }

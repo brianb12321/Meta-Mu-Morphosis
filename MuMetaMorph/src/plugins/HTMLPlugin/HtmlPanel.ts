@@ -18,6 +18,6 @@ export class HtmlPanel implements IMusicDetailsPanel {
 
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         let html: string = metadata.value["html"];
-        content.createElement("div", div => div.innerHTML = html);
+        content.element.innerHTML = html;
     }
 }

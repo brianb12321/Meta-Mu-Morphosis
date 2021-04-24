@@ -26,13 +26,17 @@ export class AccordionWidget extends HtmlWidget {
         return accordionSectionObj;
     }
     private setupAccordionEvents(accordion: HTMLButtonElement): void {
-        accordion.addEventListener("click", () => {
+        accordion.addEventListener("click", (evt) => {
+            //Prevent the page from scrolling to the top.
+            evt.preventDefault();
             accordion.classList.toggle("active");
             let panel: any = accordion.nextElementSibling;
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
+                panel.style.paddingBottom = "0";
             } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.style.maxHeight = (panel.scrollHeight + 10) + "px";
+                panel.style.paddingBottom = "10px";
             }
         });
     }
