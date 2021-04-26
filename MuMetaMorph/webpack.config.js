@@ -4,7 +4,7 @@ module.exports = {
     devtool: "source-map",
     mode: "production",
     entry: {
-        all: './src/main.ts'
+        all: './src/_build/main.js'
     },
     output: {
         filename: 'MMM-[name]-bundle.min.js',

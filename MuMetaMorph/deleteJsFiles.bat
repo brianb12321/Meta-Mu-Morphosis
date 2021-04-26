@@ -1,1 +1,1 @@
-del /Q /S "src\*.js"
+del /Q /S "src\_build\*.js"

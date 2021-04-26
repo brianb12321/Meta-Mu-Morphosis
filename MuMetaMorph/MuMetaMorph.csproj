@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="src\_build\**" />
+    <Content Remove="src\_build\**" />
+    <EmbeddedResource Remove="src\_build\**" />
+    <None Remove="src\_build\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="src\core\music\ISong.ts" />
     <None Remove="src\core\music\ISongInformation.ts" />
     <None Remove="src\core\music\ISongManager.ts" />
