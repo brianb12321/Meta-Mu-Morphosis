@@ -1,1 +1,1 @@
-rm -rf "/src/_build"
+rm -rvf "src/_build"

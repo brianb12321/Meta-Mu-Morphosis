@@ -9,7 +9,7 @@ import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStart
     TResourceManager
 } from "../../globalSymbols";
 import { ServiceExtensions } from "../../serviceExtensions";
-import { MainView } from "../../views/mainView";
+import { MainView } from "../../views/MainView";
 import { ISongManager } from "../music/ISongManager";
 import { SongManager } from "../music/SongManager";
 import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurationDatabase";
