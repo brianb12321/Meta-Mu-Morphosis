@@ -6,7 +6,7 @@ MuMetaMorph is a fully client-side music and playlist manager.
 * Morph - MMM is an evolving program. It is fully modular with its bundling and packaging architecture. Based off the suckless methodology, MMM uses Webpack to package all core functionality and plugins into one easy-to-manage Javascript file.
 ## Building
 If you modified MMM or wish to manually build, follow the following steps:
-1. Change to package.json directory.
+1. Change to `package.json` directory.
 2. Download all necessary packages from NPM:
 ```
 $ npm install
@@ -24,3 +24,7 @@ $ npm run build-sh
 $ dotnet build
 $ dotnet run
 ```
+## Running VSCode Live Server
+If you are running VSCode live server, please update your `Settings.json` webserver root path to the `wwwroot` directory.
+## Theme not loading.
+If the default theme is not loading, please edit the global default theme variables in `src/defaults.ts` for your specific webserver and delete the database.
