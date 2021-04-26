@@ -8,10 +8,10 @@
     "tsc": "./node_modules/.bin/tsc",
     "webpack": "webpack",
     "cleanJS": "deleteJsFiles.bat",
-    "cleanJS-SH": "./deleteJsFiles.sh",
+    "cleanJS-sh": "./deleteJsFiles.sh",
     "cleanMap": "deleteMapFiles.bat",
     "build": "npm run tsc && npm run webpack && npm run cleanJS",
-    "build-SH": "npm run tsc && npm run webpack && npm run cleanJS-SH"
+    "build-sh": "npm run tsc && npm run webpack && npm run cleanJS-sh"
   },
   "author": "",
   "license": "ISC",
