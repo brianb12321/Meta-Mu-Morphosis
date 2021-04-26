@@ -12,6 +12,7 @@ export class MusicView extends View<MusicViewModel> {
     constructor(private viewNavigator: IViewNavigator) {
         super();
         this.dataContext = getMusicViewModel();
+        this.dataContext.title = "Music";
         let mainElement = document.createElement("main");
         mainElement.classList.add("main", "main-music");
         this.renderBody = mainElement;

@@ -11,6 +11,7 @@ export class HomeView extends View<HomeViewModel>{
     constructor() {
         super();
         this.dataContext = getHomeViewModel();
+        this.dataContext.title = "Home";
         let mainElement = document.createElement("main");
         mainElement.classList.add("main", "main-home");
         this.renderBody = mainElement;

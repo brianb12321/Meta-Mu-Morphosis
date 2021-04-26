@@ -14,6 +14,8 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         this.renderBody.classList.add("main-musicDetails");
         this.tabNavigator = new TabNavigator();
         this.dataContext.setSongId(songId).then(() => {
+            this.dataContext.title = this.dataContext.songName;
+            this.forceTitleUpdate();
             this.displayBanner(this.renderBody);
             let bodyDiv = document.createElement("div");
             bodyDiv.id = "musicDetailsBody";

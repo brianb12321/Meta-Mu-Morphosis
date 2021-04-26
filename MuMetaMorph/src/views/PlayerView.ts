@@ -11,6 +11,7 @@ export class PlayerView extends View<PlayerViewModel> {
     constructor() {
         super();
         this.dataContext = getPlayerViewModel();
+        this.dataContext.title = null;
         let container = document.createElement("div");
         container.classList.add("player");
         container.style.marginTop = "40px";

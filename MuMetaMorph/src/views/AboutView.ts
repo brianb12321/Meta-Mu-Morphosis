@@ -8,6 +8,7 @@ export class AboutView extends View<AboutViewModel> {
     constructor() {
         super();
         this.dataContext = getAboutViewModel();
+        this.dataContext.title = "About";
         let bodyWidget = new HtmlWidget("main", "");
         //I am creating the html-inline this way, so I get syntax highlighting.
         bodyWidget.element.innerHTML = `

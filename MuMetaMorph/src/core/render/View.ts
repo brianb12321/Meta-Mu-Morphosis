@@ -7,4 +7,13 @@ export abstract class View<TViewModel extends BaseViewModel> extends Widget {
 	public dataContext: TViewModel;
     //Executed after the constructor finished loading, but right before the DOM gets rendered.
     public afterConstruction: () => void;
+    async render(): Promise<void> {
+        await super.render();
+        if (this.dataContext != null && this.dataContext.title != null) {
+            document.title = this.dataContext.title + " - MMM";
+        }
+    }
+    public forceTitleUpdate() {
+        document.title = this.dataContext.title + " - MMM";
+    }
 }
