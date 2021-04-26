@@ -19,7 +19,7 @@ export class DefaultThemeManager implements IThemeManager {
         if (!await this.configManager.configurationExists(this.THEME_CONFIG_NAME)) {
             this.logger.log("[Theme Manager]: Theme configuration object does not exist.");
             let configObject: IThemeConfiguration = {
-                StylesheetRootDir: "/styles",
+                StylesheetRootDir: "styles",
                 DefaultThemeName: "AquaBlue",
                 Themes: [
                     {
