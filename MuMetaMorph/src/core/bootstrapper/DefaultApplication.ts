@@ -1,69 +1,98 @@
-import { Injectable, Inject, Container } from "container-ioc";
-import { TLogger, TConfigurationManager, TPageNavigator, TThemeManager, TNavBar } from "../globalSymbols";
+import { container, injectable } from "tsyringe"
 import { IApplication } from "./IApplication";
 import { ILogger } from "../logging/ILogger";
-import { IPageNavigator } from "../render/IPageNavigator";
-import { INavBar } from "../render/INavBar";
 import { IConfigurationManager } from "../configuration/IConfigurationManager";
-import { LocalStorageConfigurationManager } from "../configuration/LocalStorageConfigurationManager";
-import GlobalSymbols = require("../globalSymbols");
+import { IndexDbConfigurationManager } from "../configuration/indexDb/IndexDbConfigurationManager";
+import { IStartupItem } from "./IStartupItem";
+import { IThemeManager } from "../render/theme/IThemeManager";
+import { TLogger, TConfigManager, TPageNavigator, TNavBar, TThemeManager, TStartupItem, TSongManager,
+    TResourceManager
+} from "../../globalSymbols";
+import { ServiceExtensions } from "../../serviceExtensions";
+import { MainView } from "../../views/mainView";
+import { ISongManager } from "../music/ISongManager";
+import { SongManager } from "../music/SongManager";
+import { MMMConfigurationDatabase } from "../configuration/indexDb/MMMConfigurationDatabase";
+import { ResourceManager } from "../resourceSystem/ResourceManager";
+import { IResourceManager } from "../resourceSystem/IResourceManager";
 
-@Injectable()
+@injectable()
 export class DefaultApplication implements IApplication {
-    container: Container;
-    logger: ILogger;
-    configurationManager: IConfigurationManager;
+    private logger: ILogger;
+    private configurationManager: IConfigurationManager;
+    private resourceManager: IResourceManager;
+    private database: MMMConfigurationDatabase;
+    private songManager: ISongManager;
     constructor() {
         
     }
-    configureContainer(containerBuilder: Function): IApplication {
+    configureContainer(containerBuilder: (serviceExtensions: ServiceExtensions) => void): IApplication {
         if (containerBuilder != null) {
-            this.container = containerBuilder();
-        } else {
-            this.container = new Container();
+            containerBuilder(new ServiceExtensions(this));
         }
-        //Normally this would be bad practice (service-locator)m but the page navigator needs access to the container.
-        this.container.register([{ token: GlobalSymbols.TContainer, useValue: this.container }]);
-        //We are going to attempt to add a logger and configuration manager to the container
-        this.container.register([
-            { token: TLogger, useValue: this.logger },
-            { token: TConfigurationManager, useValue: this.configurationManager }
-        ]);
+        container.registerInstance(TLogger, this.logger);
+        container.registerInstance(TConfigManager, this.configurationManager);
+        container.registerInstance(TSongManager, this.songManager);
+        container.registerInstance(TResourceManager, this.resourceManager);
         return this;
     }
     addLogger(logger: ILogger): IApplication {
         this.logger = logger;
         return this;
     }
+    useDatabase(databaseBuilder: Function): IApplication {
+        if (databaseBuilder != null) {
+            this.database = databaseBuilder();
+        } else {
+            this.database = new MMMConfigurationDatabase(this.logger);
+        }
+        return this;
+    }
+    addSongManager(songManagerBuilder: Function): IApplication {
+        if (songManagerBuilder != null) {
+            this.songManager = songManagerBuilder();
+        } else {
+            this.songManager = new SongManager(this.database);
+        }
+        return this;
+    }
     addConfigurationManager(configBuilder: Function): IApplication {
         if (configBuilder != null) {
             this.configurationManager = configBuilder();
         } else {
-            this.configurationManager = new LocalStorageConfigurationManager(this.logger);
+            this.configurationManager = new IndexDbConfigurationManager(this.logger, this.database);
         }
         
         return this;
     }
+    addResourceManager(resourceManagerBuilder: Function): IApplication {
+        if (resourceManagerBuilder != null) {
+            this.resourceManager = resourceManagerBuilder();
+        } else {
+            this.resourceManager = new ResourceManager(this.logger, this.database);
+        }
+
+        return this;
+    }
+    async initializeStartupItems() {
+        this.logger.log("Initializing startup items...");
+        for (let startupItem of container.resolveAll<IStartupItem>(TStartupItem)) {
+            await startupItem.initialize();
+        }
+    }
     async run(indexPageToken: any) {
-        this.logger.log("Application started.");
+        await this.initializeStartupItems();
         await this.loadTheme();
-        let pageNavigator: IPageNavigator = this.container.resolve(TPageNavigator);
-        let navigationBar: INavBar = this.container.resolve(TNavBar);
         let body = document.querySelector("#render-body");
-        let bodyHeading = document.createElement("heading");
-        let bodyMain = document.createElement("main");
-        body.appendChild(bodyHeading);
-        body.appendChild(bodyMain);
-        pageNavigator.navigationBar = navigationBar;
-        pageNavigator.navigationRenderBody = bodyHeading;
-        pageNavigator.pageBodyRenderBody = bodyMain;
-        await pageNavigator.refreshNavBar();
-        await pageNavigator.navigate(indexPageToken);
+        let view: MainView = new MainView();
+        view.renderBody = body;
+        view.afterConstruction();
+        await view.render();
+        this.logger.log("Application started.");
     }
     private async loadTheme() {
         this.logger.log("Loading css theme...");
-        let themeManager: IThemeManager = this.container.resolve(TThemeManager);
-        await themeManager.initialize();
+        let themeManager: IThemeManager = container.resolve(TThemeManager);
         let fileRef = document.createElement("link");
         fileRef.rel = "stylesheet";
         fileRef.type = "text/css";

@@ -1,0 +1,12 @@
+export const TContainer = Symbol("IContainer");
+export const TLogger = Symbol("ILogger");
+export const TApplication = Symbol("IApplication");
+export const TThemeManager = Symbol("IThemeManager");
+export const TNavBar = Symbol("INavBar");
+export const TPageNavigator = Symbol("IPageNavigator");
+export const TDatabase = Symbol("IDatabase");
+export const TConfigManager = Symbol("IConfigurationManager");
+export const TStartupItem = Symbol("IStartupItem");
+export const TSongManager = Symbol("ISongManager");
+export const TPlugins = Symbol("PluginBase");
+export const TResourceManager = Symbol("IResourceManager");

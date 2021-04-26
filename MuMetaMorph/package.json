@@ -8,6 +8,7 @@
     "tsc": "./node_modules/.bin/tsc",
     "webpack": "webpack",
     "cleanJS": "deleteJsFiles.bat",
+    "cleanMap": "deleteMapFiles.bat",
     "build": "npm run tsc && npm run webpack && npm run cleanJS"
   },
   "author": "",
@@ -15,12 +16,15 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-preset-typescript": "^7.0.0-alpha.19",
-    "container-ioc": "^1.7.19",
     "dexie": "^3.0.3",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.5.0",
     "webpack": "^5.30.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "howler": "^2.2.1",
+    "lottie-web": "^5.7.8",
     "webpack-cli": "^4.6.0"
   }
 }

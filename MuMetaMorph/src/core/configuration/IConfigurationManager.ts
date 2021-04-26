@@ -1,6 +1,7 @@
-//Provides facilities for loading and saving configuration objects to the browser's local storage.
+﻿import { IConfiguration } from "./IConfiguration";
+
 export interface IConfigurationManager {
-    saveRootConfigObject(rootName: string, rootConfigObject: any): Promise<void>;
-    loadRootConfigObject(rootName: string): Promise<any>;
-    rootExists(rootName: string): Promise<boolean>;
+    getConfiguration<TConfObj extends IConfiguration>(name: string): Promise<TConfObj>;
+    saveConfiguration<TConfObj extends IConfiguration>(name: string, configObj: TConfObj): Promise<void>;
+    configurationExists(name: string): Promise<boolean>;
 }

@@ -5,33 +5,172 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Remove="node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\dist\" />
+    <None Remove="src\core\music\ISong.ts" />
+    <None Remove="src\core\music\ISongInformation.ts" />
+    <None Remove="src\core\music\ISongManager.ts" />
+    <None Remove="src\core\music\SongManager.ts" />
+    <None Remove="src\core\music\SongMetadata.ts" />
+    <None Remove="src\core\pluginSystem\IEditSongFormComponent.ts" />
+    <None Remove="src\core\pluginSystem\IHomePanelWidget.ts" />
+    <None Remove="src\core\pluginSystem\IMusicDetailsPanel.ts" />
+    <None Remove="src\core\pluginSystem\INewSongFormComponent.ts" />
+    <None Remove="src\core\pluginSystem\IPluginComponent.ts" />
+    <None Remove="src\core\pluginSystem\PluginBase.ts" />
+    <None Remove="src\core\render\HTMLWidgetFormBuilder.ts" />
+    <None Remove="src\core\render\ICommand.ts" />
+    <None Remove="src\core\render\IFormBuilder.ts" />
+    <None Remove="src\core\render\IPageNavigator.js.map" />
+    <None Remove="src\core\render\ITabNavigator.ts" />
+    <None Remove="src\core\render\IViewNavigator.ts" />
+    <None Remove="src\core\render\RelayCommand.ts" />
+    <None Remove="src\core\resourceSystem\IBlobResource.ts" />
+    <None Remove="src\core\resourceSystem\IResourceManager.ts" />
+    <None Remove="src\core\resourceSystem\Resource.ts" />
+    <None Remove="src\core\resourceSystem\ResourceManager.ts" />
+    <None Remove="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
+    <None Remove="src\plugins\HTMLPlugin\HtmlPanel.ts" />
+    <None Remove="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
+    <None Remove="src\plugins\TestPlugin.ts" />
+    <None Remove="src\viewModelCollection.ts" />
+    <None Remove="src\views\AboutView.ts" />
+    <None Remove="src\views\AddNewSongView.ts" />
+    <None Remove="src\views\defaultPanels\HomePanel.ts" />
+    <None Remove="src\views\defaultPanels\SongPropertiesPanel.ts" />
+    <None Remove="src\views\HomeView.ts" />
+    <None Remove="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
+    <None Remove="src\views\MusicDetailsView.ts" />
+    <None Remove="src\views\PlayerView.ts" />
+    <None Remove="src\views\viewModels\AboutViewModel.ts" />
+    <None Remove="src\views\viewModels\AddNewSongViewModel.ts" />
+    <None Remove="src\views\viewModels\HomeViewModel.ts" />
+    <None Remove="src\views\viewModels\MainViewModel.ts" />
+    <None Remove="src\views\viewModels\MusicDetailsViewModel.ts" />
+    <None Remove="src\views\viewModels\MusicViewModel.ts" />
+    <None Remove="src\views\viewModels\NavigationBarViewModel.ts" />
+    <None Remove="src\views\viewModels\PlayerViewModel.ts" />
+    <None Remove="src\views\widgets\AccordionWidget.ts" />
+    <None Remove="src\views\widgets\AudioWidget.ts" />
+    <None Remove="src\views\widgets\ButtonWidget.ts" />
+    <None Remove="src\views\widgets\CardGridWidget.ts" />
+    <None Remove="src\views\widgets\CustomAudioWidget.ts" />
+    <None Remove="src\views\widgets\DivWidget.ts" />
+    <None Remove="src\views\widgets\HeadingWidget.ts" />
+    <None Remove="src\views\widgets\HtmlWidget.ts" />
+    <None Remove="src\views\widgets\InputWidget.ts" />
+    <None Remove="src\views\widgets\ModalDialogWidget.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="wwwroot\styles\site.css">
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\core\music\ISongInformation.ts" />
+    <TypeScriptCompile Include="src\core\music\ISong.ts" />
+    <TypeScriptCompile Include="src\core\music\ISongManager.ts" />
+    <TypeScriptCompile Include="src\core\music\SongManager.ts" />
+    <TypeScriptCompile Include="src\core\music\SongMetadata.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IHomePanelWidget.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IMusicDetailsPanel.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IEditSongFormComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\core\pluginSystem\INewSongFormComponent.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IPluginComponent.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\PluginBase.ts" />
+    <TypeScriptCompile Include="src\core\render\BaseViewModel.ts" />
+    <TypeScriptCompile Include="src\core\render\HTMLWidgetFormBuilder.ts" />
+    <TypeScriptCompile Include="src\core\render\ICommand.ts" />
+    <TypeScriptCompile Include="src\core\render\IFormBuilder.ts" />
+    <TypeScriptCompile Include="src\core\render\ITabNavigator.ts" />
+    <TypeScriptCompile Include="src\core\render\IViewNavigator.ts" />
+    <TypeScriptCompile Include="src\core\render\RelayCommand.ts" />
+    <TypeScriptCompile Include="src\core\render\Widget.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\ResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\IBlobResource.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\IResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\Resource.ts" />
+    <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
+    <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPanel.ts" />
+    <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
+    <TypeScriptCompile Include="src\plugins\TestPlugin.ts" />
+    <TypeScriptCompile Include="src\viewModelCollection.ts" />
+    <TypeScriptCompile Include="src\views\AboutView.ts" />
+    <TypeScriptCompile Include="src\views\AddNewSongView.ts" />
+    <TypeScriptCompile Include="src\views\defaultPanels\HomePanel.ts" />
+    <TypeScriptCompile Include="src\views\defaultPanels\SongPropertiesPanel.ts" />
+    <TypeScriptCompile Include="src\views\HomeView.ts" />
+    <TypeScriptCompile Include="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
+    <TypeScriptCompile Include="src\views\MusicDetailsView.ts" />
+    <TypeScriptCompile Include="src\views\PlayerView.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\AboutViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\AddNewSongViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\HomeViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\MainViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\MusicDetailsViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\MusicViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\NavigationBarViewModel.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\PlayerViewModel.ts" />
+    <TypeScriptCompile Include="src\views\widgets\AccordionWidget.ts" />
+    <TypeScriptCompile Include="src\views\widgets\AudioWidget.ts" />
+    <TypeScriptCompile Include="src\views\widgets\ButtonWidget.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\views\widgets\CardGridWidget.ts" />
+    <TypeScriptCompile Include="src\views\widgets\CustomAudioWidget.ts" />
+    <TypeScriptCompile Include="src\views\widgets\DivWidget.ts" />
+    <TypeScriptCompile Include="src\views\widgets\InputWidget.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\views\widgets\HeadingWidget.ts" />
+    <TypeScriptCompile Include="src\views\NavBarView.ts" />
+    <TypeScriptCompile Include="src\views\widgets\HtmlWidget.ts" />
+    <TypeScriptCompile Include="src\core\render\ModalDialog.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\danger.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.2.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
+    </Content>
     <Content Update="wwwroot\dist\MMM-all-bundle.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\styles\site.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\sunset.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\synchronizedLove.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\synchronizedLoveRemix.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\test.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\WalkieTalkie.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="src\core\pluginSystem\INewSongFormComponent - Copy.js">
+      <DependentUpon>INewSongFormComponent.js</DependentUpon>
+    </None>
+    <None Update="src\views\widgets\HeadingWidget - Copy.js">
+      <DependentUpon>HeadingWidget.js</DependentUpon>
+    </None>
+    <None Update="src\views\widgets\InputWidget - Copy.js">
+      <DependentUpon>InputWidget.js</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="npm run build" />
+  </Target>
 
 </Project>
