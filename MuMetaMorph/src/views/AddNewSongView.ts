@@ -1,6 +1,6 @@
 ﻿import { INewSongFormComponent } from "../core/pluginSystem/INewSongFormComponent";
 import { HtmlWidgetFormBuilder } from "../core/render/HTMLWidgetFormBuilder";
-import { ITabNavigator } from "../core/render/ITabNavigator";
+import { ITabNavigator } from '../core/render/ITabNavigator';
 import { IViewNavigator } from "../core/render/IViewNavigator";
 import { View } from "../core/render/View";
 import { getAddNewSongViewModel } from "../viewModelCollection";
@@ -9,11 +9,13 @@ import { AddNewSongViewModel } from "./viewModels/AddNewSongViewModel";
 import { AccordionWidget } from "./widgets/AccordionWidget";
 import { CardGridWidget } from "./widgets/CardGridWidget";
 import { HtmlWidget } from "./widgets/HtmlWidget";
+import { ResourceType } from "../core/resourceSystem/Resource";
 
 export class AddNewSongView extends View<AddNewSongViewModel> {
     constructor(private viewNavigator: IViewNavigator) {
         super();
         this.dataContext = getAddNewSongViewModel();
+        this.dataContext.formData.main = {};
         let mainElement = document.createElement("main");
         mainElement.classList.add("main");
         let html = new HtmlWidget("form", "");
@@ -24,7 +26,7 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
         accordion.accordionAdded = (section) => this.dataContext.accordionSections.push(section);
         let importJsonPanel = accordion.addAccordionSection("Import Song From JSON", false, null).panel;
         let importJsonForm = new HtmlWidgetFormBuilder(importJsonPanel);
-        let browseModalDialog = new BrowseResourceModalDialogBox(html.renderBody);
+        let browseModalDialog = new BrowseResourceModalDialogBox(this.dataContext.resourceManager, html.renderBody);
         importJsonForm.addParagraph("You have the ability to import a song from a JSON file.")
             .addFileInput("JSON File", "jsonFileInput", false, fileInput => {
                 fileInput.accept = ".json";
@@ -58,8 +60,13 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
                 div.textContent =
                     "WARNING: the image will be resized to fit the banner width. Any image size is allowed.";
             })
-            .addResourceInput("URL To Audio", "urlInput", true, (input) => {
+            .addResourceInput("Audio Resource", "urlInput", true, (input) => {
                 browseModalDialog.showDialog();
+            }, input => {
+                browseModalDialog.valueSelected = (type, resourceId, name) => {
+                    this.dataContext.formData.main.audioResourceId = resourceId;
+                    input.value = `${ResourceType[type]}: ${name}`;
+                };
             });
         let cardGrid = new CardGridWidget();
         html.widgets.push(cardGrid);
@@ -76,12 +83,10 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
                     alert("Form not valid.");
                     return;
                 }
-                this.dataContext.formData.main = {};
                 this.dataContext.formData.main.songName = (html.element.querySelector("div #songNameInput") as HTMLInputElement).value;
                 this.dataContext.formData.main.artist = (html.element.querySelector("div #artistInput") as HTMLInputElement).value;
                 this.dataContext.formData.main.songImageUrl =
                     (html.element.querySelector("div #songImageInput") as HTMLInputElement).value;
-                this.dataContext.formData.main.audioStreamUrl = (html.element.querySelector("div #urlInput") as HTMLInputElement).value;
                 this.populateFormData(accordion);
                 let newSongId = await this.dataContext.addSongAndClear();
                 alert("Song Added");

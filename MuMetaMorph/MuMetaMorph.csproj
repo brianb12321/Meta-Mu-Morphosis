@@ -11,6 +11,7 @@
     <None Remove="src\core\music\SongManager.ts" />
     <None Remove="src\core\music\SongMetadata.ts" />
     <None Remove="src\core\pluginSystem\IEditSongFormComponent.ts" />
+    <None Remove="src\core\pluginSystem\IHomePanelWidget.ts" />
     <None Remove="src\core\pluginSystem\IMusicDetailsPanel.ts" />
     <None Remove="src\core\pluginSystem\INewSongFormComponent.ts" />
     <None Remove="src\core\pluginSystem\IPluginComponent.ts" />
@@ -22,20 +23,24 @@
     <None Remove="src\core\render\ITabNavigator.ts" />
     <None Remove="src\core\render\IViewNavigator.ts" />
     <None Remove="src\core\render\RelayCommand.ts" />
-    <None Remove="src\core\resourceSystem\BlobResourceManager.ts" />
     <None Remove="src\core\resourceSystem\IBlobResource.ts" />
-    <None Remove="src\core\resourceSystem\IBlobResourceManager.ts" />
+    <None Remove="src\core\resourceSystem\IResourceManager.ts" />
+    <None Remove="src\core\resourceSystem\Resource.ts" />
+    <None Remove="src\core\resourceSystem\ResourceManager.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlPanel.ts" />
     <None Remove="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
     <None Remove="src\plugins\TestPlugin.ts" />
     <None Remove="src\viewModelCollection.ts" />
+    <None Remove="src\views\AboutView.ts" />
     <None Remove="src\views\AddNewSongView.ts" />
+    <None Remove="src\views\defaultPanels\HomePanel.ts" />
     <None Remove="src\views\defaultPanels\SongPropertiesPanel.ts" />
     <None Remove="src\views\HomeView.ts" />
     <None Remove="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
     <None Remove="src\views\MusicDetailsView.ts" />
     <None Remove="src\views\PlayerView.ts" />
+    <None Remove="src\views\viewModels\AboutViewModel.ts" />
     <None Remove="src\views\viewModels\AddNewSongViewModel.ts" />
     <None Remove="src\views\viewModels\HomeViewModel.ts" />
     <None Remove="src\views\viewModels\MainViewModel.ts" />
@@ -67,6 +72,7 @@
     <TypeScriptCompile Include="src\core\music\ISongManager.ts" />
     <TypeScriptCompile Include="src\core\music\SongManager.ts" />
     <TypeScriptCompile Include="src\core\music\SongMetadata.ts" />
+    <TypeScriptCompile Include="src\core\pluginSystem\IHomePanelWidget.ts" />
     <TypeScriptCompile Include="src\core\pluginSystem\IMusicDetailsPanel.ts" />
     <TypeScriptCompile Include="src\core\pluginSystem\IEditSongFormComponent.ts">
       <SubType>Code</SubType>
@@ -82,20 +88,24 @@
     <TypeScriptCompile Include="src\core\render\IViewNavigator.ts" />
     <TypeScriptCompile Include="src\core\render\RelayCommand.ts" />
     <TypeScriptCompile Include="src\core\render\Widget.ts" />
-    <TypeScriptCompile Include="src\core\resourceSystem\BlobResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\ResourceManager.ts" />
     <TypeScriptCompile Include="src\core\resourceSystem\IBlobResource.ts" />
-    <TypeScriptCompile Include="src\core\resourceSystem\IBlobResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\IResourceManager.ts" />
+    <TypeScriptCompile Include="src\core\resourceSystem\Resource.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlFormComponent.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPanel.ts" />
     <TypeScriptCompile Include="src\plugins\HTMLPlugin\HtmlPlugin.ts" />
     <TypeScriptCompile Include="src\plugins\TestPlugin.ts" />
     <TypeScriptCompile Include="src\viewModelCollection.ts" />
+    <TypeScriptCompile Include="src\views\AboutView.ts" />
     <TypeScriptCompile Include="src\views\AddNewSongView.ts" />
+    <TypeScriptCompile Include="src\views\defaultPanels\HomePanel.ts" />
     <TypeScriptCompile Include="src\views\defaultPanels\SongPropertiesPanel.ts" />
     <TypeScriptCompile Include="src\views\HomeView.ts" />
     <TypeScriptCompile Include="src\views\modalDialogBoxes\BrowseResourceModalDialogBox.ts" />
     <TypeScriptCompile Include="src\views\MusicDetailsView.ts" />
     <TypeScriptCompile Include="src\views\PlayerView.ts" />
+    <TypeScriptCompile Include="src\views\viewModels\AboutViewModel.ts" />
     <TypeScriptCompile Include="src\views\viewModels\AddNewSongViewModel.ts" />
     <TypeScriptCompile Include="src\views\viewModels\HomeViewModel.ts" />
     <TypeScriptCompile Include="src\views\viewModels\MainViewModel.ts" />
@@ -121,12 +131,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\butterflyDigimon.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\danger.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\danger.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -136,31 +140,16 @@
     <Content Update="wwwroot\styles\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\sunset.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\sunset.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\synchronizedLove.m4a">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\synchronizedLove.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\synchronizedLoveRemix.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\synchronizedLoveRemix.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\test.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\test.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\WalkieTalkie.m4a">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\WalkieTalkie.mp3">
@@ -171,9 +160,6 @@
   <ItemGroup>
     <None Update="src\core\pluginSystem\INewSongFormComponent - Copy.js">
       <DependentUpon>INewSongFormComponent.js</DependentUpon>
-    </None>
-    <None Update="src\core\pluginSystem\INewSongFormComponent - Copy.js.map">
-      <DependentUpon>INewSongFormComponent.js.map</DependentUpon>
     </None>
     <None Update="src\views\widgets\HeadingWidget - Copy.js">
       <DependentUpon>HeadingWidget.js</DependentUpon>

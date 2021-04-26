@@ -10,6 +10,8 @@ import { AccordionWidget, AccordionSection } from "../widgets/AccordionWidget";
 import { CardGridWidget } from "../widgets/CardGridWidget";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
+import { BrowseResourceModalDialogBox } from "../modalDialogBoxes/BrowseResourceModalDialogBox";
+import { ResourceType } from "../../core/resourceSystem/Resource";
 
 export class SongProeprtiesPanel implements IMusicDetailsPanel {
     public get panelName(): string { return "Song Properties"; }
@@ -26,6 +28,7 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
         this.supportedPluginComponents = [];
         this.pluginsAdded = [];
         this.formData = {};
+        this.formData.main = {};
         this.accordionSections = [];
         this.editComponents = [];
         for (let notLoadedPlugin of viewModel.plugins.filter(plugin => viewModel.loadedPlugins.map(pluginObj => pluginObj.pluginName).includes(plugin.pluginName) === false)) {
@@ -38,7 +41,8 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         this.tabNavigator = new TabNavigator();
         content.createElement("h1", h1 => h1.textContent = `Song Properties for ${this.song.name}`);
-        let form = content.createElement("form", parentDiv => {});
+        let form = content.createElement("form", parentDiv => { });
+        let browseModalDialog = new BrowseResourceModalDialogBox(this.viewModel.resourceManager, form.element);
         let tabContainer = form.createElement("div", div => {
             div.classList.add("tab-horizontal-container");
             this.tabNavigator.parentContainer = div;
@@ -53,6 +57,8 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
             });
 
         let mainPanel = this.addTab("Main", "main", true, null);
+        let pluginsUsedPanel = this.addTab("Plugins Used", "pluginsUsed", false, null);
+        this.setupPluginsUsedPanel(pluginsUsedPanel);
         this.addPluginTabItems();
         mainPanel.renderBody.classList.add("form-container");
         let accordion = new AccordionWidget();
@@ -62,14 +68,25 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
         let editSongAccordionPanel = accordion.addAccordionSection("Edit Song", true, null);
         let formBuilder = new HtmlWidgetFormBuilder(editSongAccordionPanel.panel, true);
         formBuilder.addTextInput("Song Name", "songNameInput", true, input => input.value = this.song.name)
-            .addTextInput("Artist", "artistInput", true, input => input.value = "Field not Ready")
+            .addTextInput("Artist", "artistInput", true, input => input.value = this.song.artist)
             .addUrlInput("URL To Song Image", "songImageInput", false, input => input.value = this.song.bannerImageUrl)
             .addElement("div", div => {
                 div.classList.add("admon-warning");
                 div.textContent =
                     "WARNING: the image will be resized to fit the banner width. Any image size is allowed.";
             })
-            .addUrlInput("URL To Audio", "urlInput", true, input => input.value = this.song.audioStreamUrl);
+            .addResourceInput("Audio Resource", "urlInput", true, (input) => {
+                browseModalDialog.showDialog();
+            }, input => {
+                browseModalDialog.valueSelected = (type, resourceId, name) => {
+                    this.formData.main.audioResourceId = resourceId;
+                    input.value = `${ResourceType[type]}: ${name}`;
+                };
+                if (this.viewModel.audioResourceExists()) {
+                    this.formData.main.audioResourceId = this.viewModel.getAudioResourceId();
+                    input.value = `${ResourceType[this.viewModel.getAudioResourceType()]}: ${this.viewModel.getAudioResourceName()}`;
+                }
+            });
         let cardGrid = new CardGridWidget();
         mainPanel.renderBody.appendChild(cardGrid.renderBody);
         this.renderCards(cardGrid, accordion);
@@ -83,7 +100,6 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
                     alert("Form not valid.");
                     return;
                 }
-                this.formData.main = {};
                 this.formData.main.songName = (mainPanel.element.querySelector("div #songNameInput") as HTMLInputElement).value;
                 this.formData.main.artist = (mainPanel.element.querySelector("div #artistInput") as HTMLInputElement).value;
                 this.formData.main.songImageUrl =
@@ -94,6 +110,60 @@ export class SongProeprtiesPanel implements IMusicDetailsPanel {
                 await this.viewModel.updateSong(this.pluginsAdded, this.editComponents, this.formData);
             });
         });
+    }
+    private setupPluginsUsedPanel(panel: HtmlWidget) {
+        panel.createElement("p",
+            p => p.textContent =
+                "The following plugins have been loaded for this song. You can disable or remove plugins here.");
+        panel.createElement("div", div => {
+            div.classList.add("admon-warning");
+            div.textContent = "WARNING: Any actions issued in this tab will automatically refresh the page.";
+        });
+        panel.createElement("table", element => {
+            let table = element as HTMLTableElement;
+            table.innerHTML = `
+<thead>
+<tr>
+    <th>Name</th>
+    <th>Friendly Name</th>
+    <th>Actions</th>
+</tr>
+</thead>
+`;
+            let body = table.createTBody();
+            for (let loadedPlugin of this.viewModel.loadedPlugins) {
+                let row = body.insertRow();
+                let nameCell = row.insertCell();
+                nameCell.textContent = loadedPlugin.pluginName;
+                let friendlyNameCell = row.insertCell();
+                friendlyNameCell.textContent = loadedPlugin.friendlyPluginName;
+                let actionCell = row.insertCell();
+                this.insertPluginActions(actionCell, loadedPlugin.pluginName);
+            }
+        });
+    }
+    private insertListAnchor(parent: HTMLElement) {
+        let listItem = document.createElement("li");
+        let anchor = document.createElement("a");
+        listItem.appendChild(anchor);
+        parent.appendChild(anchor);
+        return anchor;
+    }
+    private insertPluginActions(actionCell: HTMLTableCellElement, pluginName: string) {
+        let list = document.createElement("ul");
+        list.classList.add("table-list");
+        let removeAction = this.insertListAnchor(list);
+        removeAction.textContent = "Remove Plugin";
+        removeAction.href = "#";
+        removeAction.addEventListener("click", async (evt: UIEvent) => {
+            evt.preventDefault();
+            if (confirm(
+                `Are you sure you want to remove plugin "${pluginName}"? All associated plugin data for this song will be deleted.`)) {
+                await this.viewModel.removePlugin(pluginName);
+            }
+            return false;
+        });
+        actionCell.appendChild(list);
     }
     private addTab(tabName: string, tabId: string, defaultTab: boolean, component: IEditSongFormComponent): HtmlWidget {
         return this.tabNavigator.addTabMenuItem(tabName, tabId, defaultTab, component);

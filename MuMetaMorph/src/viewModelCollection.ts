@@ -6,7 +6,9 @@
 */
 
 import { container } from "tsyringe";
+import { AboutViewModel } from "./views/viewModels/AboutViewModel";
 import { AddNewSongViewModel } from "./views/viewModels/AddNewSongViewModel";
+import { HomeViewModel } from "./views/viewModels/HomeViewModel";
 import { MainViewModel } from "./views/viewModels/MainViewModel";
 import { MusicDetailsViewModel } from "./views/viewModels/MusicDetailsViewModel";
 import { MusicViewModel } from "./views/viewModels/MusicViewModel";
@@ -18,9 +20,19 @@ export function getMainViewModel(): MainViewModel {
     let value: MainViewModel = container.resolve(TMainViewModel);
     return value;
 };
+export const THomeViewModel = Symbol("HomeViewModel");
+export function getHomeViewModel(): HomeViewModel {
+    let value: HomeViewModel = container.resolve(THomeViewModel);
+    return value;
+};
 export const TMusicViewModel = Symbol("MusicViewModel");
 export function getMusicViewModel(): MusicViewModel {
     let value: MusicViewModel = container.resolve(TMusicViewModel);
+    return value;
+};
+export const TAboutViewModel = Symbol("AboutViewModel");
+export function getAboutViewModel(): AboutViewModel {
+    let value: AboutViewModel = container.resolve(TAboutViewModel);
     return value;
 };
 export const TNavigationBarViewModel = Symbol("NavigationBarViewModel");
@@ -46,7 +58,9 @@ export function getMusicDetailsViewModel(): MusicDetailsViewModel {
 
 export function addViewModels(): void {
     container.registerType(TMainViewModel, MainViewModel);
+    container.registerType(THomeViewModel, HomeViewModel);
     container.registerType(TMusicViewModel, MusicViewModel);
+    container.registerType(TAboutViewModel, AboutViewModel);
     container.registerType(TNavigationBarViewModel, NavigationBarViewModel);
     container.registerType(TPlayerViewModel, PlayerViewModel);
     container.registerType(TAddNewSongViewModel, AddNewSongViewModel);

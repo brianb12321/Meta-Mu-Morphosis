@@ -5,7 +5,8 @@ import { SongMetadata } from "../../core/music/SongMetadata";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { BaseViewModel } from "../../core/render/BaseViewModel";
-import { TPlugins, TSongManager } from "../../globalSymbols";
+import { IResourceManager } from "../../core/resourceSystem/IResourceManager";
+import { TPlugins, TResourceManager, TSongManager } from "../../globalSymbols";
 import { AccordionSection } from "../widgets/AccordionWidget";
 
 @injectable()
@@ -14,7 +15,7 @@ export class AddNewSongViewModel extends BaseViewModel {
     supportedPluginComponents: INewSongFormComponent[];
     pluginsUsed: INewSongFormComponent[];
     accordionSections: AccordionSection[];
-    constructor(@inject(TSongManager) public songManager: ISongManager, @injectAll(TPlugins) plugins: PluginBase[]) {
+    constructor(@inject(TSongManager) public songManager: ISongManager, @injectAll(TPlugins) plugins: PluginBase[], @inject(TResourceManager) public resourceManager: IResourceManager) {
         super();
         this.supportedPluginComponents = [];
         this.pluginsUsed = [];
@@ -33,8 +34,9 @@ export class AddNewSongViewModel extends BaseViewModel {
     async addSongAndClear(): Promise<number> {
         let song: ISong = {
             name: this.formData.main.songName as string,
+            artist: this.formData.main.artist as string,
             dateAdded: new Date(Date.now()),
-            audioStreamUrl: this.formData.main.audioStreamUrl as string,
+            audioStreamResourceId: this.formData.main.audioResourceId as number,
             bannerImageUrl: this.formData.main.songImageUrl,
             pluginsUsed: this.pluginsUsed.map(component => component.basePlugin.pluginName),
             additionalMetadata: []

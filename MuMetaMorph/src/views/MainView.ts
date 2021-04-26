@@ -9,9 +9,9 @@ import { PlayerView } from "./PlayerView";
 import { AddNewSongView } from "./AddNewSongView";
 import { MusicDetailsView } from "./MusicDetailsView";
 import { IViewNavigator } from "../core/render/IViewNavigator";
+import { AboutView } from "./AboutView";
 
 export class MainView extends View<MainViewModel> implements IViewNavigator {
-
     private navigationView: NavBarView;
     private bodyWidget: Widget;
     private playerWidget: Widget;
@@ -69,6 +69,14 @@ export class MainView extends View<MainViewModel> implements IViewNavigator {
         case "MusicDetails":
             this.dataContext.logger.logDebug(`[Main View]: Music details for songId '${args.songId}' requested.`);
             this.bodyWidget = new MusicDetailsView(args.songId, this);
+            this.bodyWidget.parentWidget = this;
+            this.widgets[1] = this.bodyWidget;
+            this.clear();
+            await this.render();
+            break;
+        case "About":
+            this.dataContext.logger.logDebug(`[Main View]: About view requested.`);
+            this.bodyWidget = new AboutView();
             this.bodyWidget.parentWidget = this;
             this.widgets[1] = this.bodyWidget;
             this.clear();

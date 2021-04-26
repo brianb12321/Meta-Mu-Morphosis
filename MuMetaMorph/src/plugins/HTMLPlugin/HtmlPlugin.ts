@@ -1,5 +1,6 @@
 ﻿import { injectable } from "tsyringe";
 import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
+import { IHomePanelWidget } from "../../core/pluginSystem/IHomePanelWidget";
 import { IMusicDetailsPanel } from "../../core/pluginSystem/IMusicDetailsPanel";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
@@ -8,6 +9,10 @@ import { HtmlPanel } from "./HtmlPanel";
 
 @injectable()
 export class HtmlPlugin extends PluginBase {
+    get useHomePanelWidget(): boolean {
+        return true;
+    }
+
     get friendlyPluginName(): string { return "HTML Plugin"; }
 
     get pluginName(): string { return "HTMLPlugin"; }
@@ -25,5 +30,9 @@ export class HtmlPlugin extends PluginBase {
     }
     getEditSongFormComponent(): IEditSongFormComponent {
         return new HtmlFormComponent(this);
+    }
+    getHomePanelWidget(): IHomePanelWidget {
+        //We will have two instances.
+        return new HtmlPanel(this);
     }
 }

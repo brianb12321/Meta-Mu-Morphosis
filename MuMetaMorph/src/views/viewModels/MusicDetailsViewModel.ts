@@ -3,12 +3,15 @@ import { ISong } from "../../core/music/ISong";
 import { ISongManager } from "../../core/music/ISongManager";
 import { IMusicDetailsPanel } from "../../core/pluginSystem/IMusicDetailsPanel";
 import { BaseViewModel } from "../../core/render/BaseViewModel";
-import { TSongManager, TPlugins } from "../../globalSymbols";
+import { TSongManager, TPlugins, TResourceManager } from "../../globalSymbols";
 import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { SongProeprtiesPanel } from "../defaultPanels/SongPropertiesPanel";
 import { INewSongFormComponent } from "../../core/pluginSystem/INewSongFormComponent";
 import { SongMetadata } from "../../core/music/SongMetadata";
 import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
+import { IResourceManager } from "../../core/resourceSystem/IResourceManager";
+import { Resource, ResourceType } from "../../core/resourceSystem/Resource";
+import { HomePanel } from "../defaultPanels/HomePanel";
 
 @injectable()
 export class MusicDetailsViewModel extends BaseViewModel {
@@ -16,15 +19,25 @@ export class MusicDetailsViewModel extends BaseViewModel {
     public loadedPluginPanels: IMusicDetailsPanel[];
     public loadedPlugins: PluginBase[];
     public songPropertiesPanel: IMusicDetailsPanel;
+    public homePanel: IMusicDetailsPanel;
     public songEdited: Function;
+    public refreshSong: Function;
+    public noAudioPresent: boolean;
+    private audioResource: Resource;
     public get songId(): number {
         return this.song.songId;
     }
-    constructor(@inject(TSongManager) public songManager: ISongManager, @injectAll(TPlugins) public plugins: PluginBase[]) {
+    constructor(@inject(TSongManager) public songManager: ISongManager, @injectAll(TPlugins) public plugins: PluginBase[], @inject(TResourceManager) public resourceManager: IResourceManager) {
         super();
     }
     async setSongId(value: number) {
         this.song = await this.songManager.getSongById(value);
+        try {
+            this.audioResource = await this.resourceManager.getResource(this.song.audioStreamResourceId);
+        } catch (error) {
+            this.noAudioPresent = true;
+        }
+        
         //Load panels.
         this.loadedPluginPanels = [];
         this.loadedPlugins = [];
@@ -37,13 +50,17 @@ export class MusicDetailsViewModel extends BaseViewModel {
                 }
             }
         }
+        //Load the home panel.
+        this.homePanel = new HomePanel(this);
+        this.homePanel.song = this.song;
         //Load the song-properties panel.
         this.songPropertiesPanel = new SongProeprtiesPanel(this);
         this.songPropertiesPanel.song = this.song;
     }
     async updateSong(pluginsAdded: INewSongFormComponent[], editComponents: IEditSongFormComponent[], updateFormData: any): Promise<void> {
         this.song.name = updateFormData.main.songName as string;
-        this.song.audioStreamUrl = updateFormData.main.audioStreamUrl as string;
+        this.song.artist = updateFormData.main.artist as string;
+        this.song.audioStreamResourceId = updateFormData.main.audioResourceId as number;
         this.song.bannerImageUrl = updateFormData.main.songImageUrl;
         for (let newPlugin of pluginsAdded.map(pluginComponent => pluginComponent.basePlugin.pluginName)) {
             this.song.pluginsUsed.push(newPlugin);
@@ -63,6 +80,13 @@ export class MusicDetailsViewModel extends BaseViewModel {
         }
         await this.songManager.putSong(this.songId, this.song);
         this.songEdited();
+        this.refreshSong();
+    }
+    public async removePlugin(pluginName: string) {
+        this.song.additionalMetadata.splice(this.song.pluginsUsed.indexOf(pluginName), 1);
+        this.song.pluginsUsed.splice(this.song.pluginsUsed.indexOf(pluginName), 1);
+        await this.songManager.putSong(this.songId, this.song);
+        this.refreshSong();
     }
     public getSongMetadataForPlugin(pluginName: string) {
         return this.song.additionalMetadata.find(metadata => metadata.pluginName === pluginName);
@@ -72,6 +96,22 @@ export class MusicDetailsViewModel extends BaseViewModel {
     }
     public get songBannerImageUrl(): string {
         return this.song.bannerImageUrl;
+    }
+    public audioResourceExists(): boolean {
+        if (this.audioResource != null) return true;
+        else return false;
+    }
+    public getAudioResourceType(): ResourceType {
+        return this.audioResource.resourceType;
+    }
+    public getAudioResourceId(): number {
+        return this.audioResource.resourceId;
+    }
+    public getAudioResourceName(): string {
+        return this.audioResource.resourceName;
+    }
+    public getPluginByName(pluginName: string): PluginBase {
+        return this.loadedPlugins.find(plugin => plugin.pluginName === pluginName);
     }
 
     async switchSong(): Promise<void> {

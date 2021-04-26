@@ -3,8 +3,12 @@ import { PluginBase } from "../../core/pluginSystem/PluginBase";
 import { IFormBuilder } from "../../core/render/IFormBuilder";
 import { SongMetadata } from "../../core/music/SongMetadata";
 import { IEditSongFormComponent } from "../../core/pluginSystem/IEditSongFormComponent";
+import { IHomePanelWidget } from "../../core/pluginSystem/IHomePanelWidget";
+import { HtmlWidget } from "../../views/widgets/HtmlWidget";
 
-export class HtmlFormComponent implements INewSongFormComponent, IEditSongFormComponent {
+export class HtmlFormComponent implements
+    INewSongFormComponent,
+    IEditSongFormComponent {
     constructor(public basePlugin: PluginBase) {
 
     }

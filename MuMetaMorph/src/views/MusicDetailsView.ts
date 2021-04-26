@@ -3,7 +3,6 @@ import { IViewNavigator } from "../core/render/IViewNavigator";
 import { View } from "../core/render/View";
 import { getMusicDetailsViewModel } from "../viewModelCollection";
 import { MusicDetailsViewModel } from "./viewModels/MusicDetailsViewModel";
-import { HtmlWidget } from './widgets/HtmlWidget';
 
 export class MusicDetailsView extends View<MusicDetailsViewModel> {
     IMAGE_SIZE = 550;
@@ -21,6 +20,8 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
             this.renderBody.appendChild(bodyDiv);
             this.dataContext.songEdited = () => {
                 alert("Song Updated");
+            }
+            this.dataContext.refreshSong = () => {
                 this.refresh();
             }
             this.displayPluginTabAMenu(bodyDiv);
@@ -63,12 +64,14 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         let bannerControlList = document.createElement("div");
         bannerControlList.classList.add("banner-controls-list");
         bannerControl.appendChild(bannerControlList);
-        let playLink = document.createElement("a");
-        playLink.textContent = "Switch Audio";
-        playLink.addEventListener("click", () => {
-            this.dataContext.switchSong();
-        });
-        bannerControlList.appendChild(playLink);
+        if (!this.dataContext.noAudioPresent) {
+            let playLink = document.createElement("a");
+            playLink.textContent = "Switch Audio";
+            playLink.addEventListener("click", () => {
+                this.dataContext.switchSong();
+            });
+            bannerControlList.appendChild(playLink);
+        }
         let deleteLink = document.createElement("a");
         deleteLink.textContent = "Delete Song";
         deleteLink.addEventListener("click", () => {
@@ -91,13 +94,13 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         bannerControlList.appendChild(exportLink);
         bannerDiv.appendChild(bannerControl);
     }
-    private addMainTab(html: Element, menuDiv: HTMLDivElement) {
-        let mainPanel = this.tabNavigator.addTabMenuItem("Main", "mainPanel", true, null);
-        mainPanel.createElement("h1", h1 => h1.textContent = "This is the main panel");
+    private async addMainTab(html: Element, menuDiv: HTMLDivElement) {
+        let homePanel = this.tabNavigator.addTabMenuItem(this.dataContext.homePanel.panelName, this.dataContext.homePanel.panelId, true, this.dataContext.homePanel);
+        await this.dataContext.homePanel.renderContent(homePanel, null);
     }
     private async addSongPropertiesTab() {
-        let propertiesWidget = this.tabNavigator.addTabMenuItem("Song Properties", "propertiesPanel", false, this.dataContext.songPropertiesPanel);
-        await this.dataContext.songPropertiesPanel.renderContent(propertiesWidget, null);
+        let propertiesPanel = this.tabNavigator.addTabMenuItem(this.dataContext.songPropertiesPanel.panelName, this.dataContext.songPropertiesPanel.panelId, false, this.dataContext.songPropertiesPanel);
+        await this.dataContext.songPropertiesPanel.renderContent(propertiesPanel, null);
     }
     private async loadPluginPanels() {
         for (let panel of this.dataContext.loadedPluginPanels) {
@@ -111,9 +114,10 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         menuDiv.classList.add("tab");
         this.tabNavigator.parentContainer = html;
         this.tabNavigator.menuDiv = menuDiv;
-        this.addMainTab(html, menuDiv);
-        this.addSongPropertiesTab().then(() => {
-            this.loadPluginPanels();
+        this.addMainTab(html, menuDiv).then(() => {
+            this.addSongPropertiesTab().then(() => {
+                this.loadPluginPanels();
+            });
         });
     }
     

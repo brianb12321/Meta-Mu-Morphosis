@@ -3,10 +3,11 @@
 export interface ISong {
     songId?: number;
     name: string;
+    artist: string;
     pluginsUsed: string[];
     listImageUrl?: string;
     bannerImageUrl?: string;
-    audioStreamUrl: string;
+    audioStreamResourceId: number;
     dateAdded: Date;
     additionalMetadata?: SongMetadata[];
 }

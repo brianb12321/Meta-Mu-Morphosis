@@ -58,6 +58,13 @@ export class HtmlWidget extends Widget {
         }
         this.widgets.splice(this.widgets.indexOf(element), 1);
     }
+    //Helper methods
+    createHeading(heading: string): HtmlWidget {
+        return this.createElement("h1", h1 => h1.textContent = heading);
+    }
+    createParagraph(paragraph: string): HtmlWidget {
+        return this.createElement("p", p => p.textContent = paragraph);
+    }
     shouldRender(): boolean {
         return true;
     }

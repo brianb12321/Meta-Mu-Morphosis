@@ -9,4 +9,4 @@ export const TConfigManager = Symbol("IConfigurationManager");
 export const TStartupItem = Symbol("IStartupItem");
 export const TSongManager = Symbol("ISongManager");
 export const TPlugins = Symbol("PluginBase");
-export const TBlobResourceManager = Symbol("IBlobResourceManager");
+export const TResourceManager = Symbol("IResourceManager");

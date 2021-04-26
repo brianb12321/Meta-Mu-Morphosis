@@ -7,12 +7,18 @@ import { SongMetadata } from "../core/music/SongMetadata";
 import { IMusicDetailsPanel } from "../core/pluginSystem/IMusicDetailsPanel";
 import { ISong } from "../core/music/ISong";
 import { IEditSongFormComponent } from "../core/pluginSystem/IEditSongFormComponent";
+import { IHomePanelWidget, WidgetSize } from "../core/pluginSystem/IHomePanelWidget";
 
 @injectable()
-export class TestPlugin extends PluginBase implements INewSongFormComponent, IMusicDetailsPanel, IEditSongFormComponent {
+export class TestPlugin extends PluginBase implements
+    INewSongFormComponent,
+    IMusicDetailsPanel,
+    IEditSongFormComponent,
+    IHomePanelWidget {
     private _name: string;
     private _friendlyName: string;
     private _description: string;
+    widgetSize: WidgetSize = WidgetSize.Normal;
     public get panelName(): string {
         return this._friendlyName;
     }
@@ -24,6 +30,12 @@ export class TestPlugin extends PluginBase implements INewSongFormComponent, IMu
     }
     get friendlyPluginName(): string {
         return this._friendlyName;
+    }
+    get useHomePanelWidget(): boolean {
+        return true;
+    }
+    public get widgetId(): string {
+        return this.pluginName + "Widget";
     }
 
     get useNewSongForm(): boolean {
@@ -53,6 +65,9 @@ export class TestPlugin extends PluginBase implements INewSongFormComponent, IMu
     getEditSongFormComponent(): IEditSongFormComponent {
         return this;
     }
+    getHomePanelWidget(): IHomePanelWidget {
+        return this;
+    }
     addForm(formBuilder: IFormBuilder): void {
         formBuilder.addParagraph("Please enter additional data you wish to save.");
         formBuilder.addTextInput("Additional Data", "additionalDataId", false);
@@ -70,5 +85,9 @@ export class TestPlugin extends PluginBase implements INewSongFormComponent, IMu
     }
     async renderContent(content: HtmlWidget, metadata: SongMetadata): Promise<void> {
         content.createElement("p", p => p.textContent = metadata.value.additionalData);
+    }
+    async renderWidget(widgetContainer: HtmlWidget, pluginMetadata: SongMetadata): Promise<void> {
+        widgetContainer.createHeading(this.friendlyPluginName);
+        widgetContainer.createElement("p", p => p.textContent = pluginMetadata.value.additionalData);
     }
 }

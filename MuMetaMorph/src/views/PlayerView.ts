@@ -1,11 +1,10 @@
-﻿import { Howl } from "howler";
-import { View } from "../core/render/View";
+﻿import { View } from "../core/render/View";
+import { ResourceType } from "../core/resourceSystem/Resource";
 import { getPlayerViewModel } from "../viewModelCollection";
 import { PlayerViewModel } from "./viewModels/PlayerViewModel";
 import { AudioWidget } from "./widgets/AudioWidget";
 import { ButtonWidget } from "./widgets/ButtonWidget";
-import { CustomAudioWidget } from "./widgets/CustomAudioWidget";
-import { DivWidget } from "./widgets/DivWidget";
+import { HtmlWidget } from "./widgets/HtmlWidget";
 
 //Represents the media-player accessible throughout the whole page.
 export class PlayerView extends View<PlayerViewModel> {
@@ -21,22 +20,45 @@ export class PlayerView extends View<PlayerViewModel> {
         hideButton.text = "Show Player";
         hideButton.addOnClickEvent(() => this.dataContext.togglePlayer.run(null));
         this.widgets.push(hideButton);
-        let playerDiv = new DivWidget();
+        let playerDiv = new HtmlWidget("div", "");
         playerDiv.parentWidget = this;
-        playerDiv.classList.add("invisible");
+        playerDiv.element.classList.add("invisible");
         this.dataContext.togglePlayerEvent = () => {
-            playerDiv.classList.toggle("invisible");
-            hideButton.text = `${playerDiv.classList.contains("invisible") ? "Show" : "Hide"} Player`;
+            playerDiv.element.classList.toggle("invisible");
+            //Turn off transparency effect.
+            if (!playerDiv.element.classList.contains("invisible")) {
+                container.style.opacity = "1";
+            } else {
+                //Turn on transparency effect.
+                container.style.opacity = ".75";
+            }
+            hideButton.text = `${playerDiv.element.classList.contains("invisible") ? "Show" : "Hide"} Player`;
         };
         let audio = new AudioWidget();
         audio.parentWidget = this;
-        audio.src = "test.mp3";
+        let audioSource: HTMLSourceElement = document.createElement("source");
+        audio.renderBody.appendChild(audioSource);
         playerDiv.widgets.push(audio);
         //let audio = new CustomAudioWidget();
-        playerDiv.widgets.push(audio);
         this.widgets.push(playerDiv);
         this.dataContext.songManager.songSwitched = async (song) => {
-            audio.src = song.audioStreamUrl;
+            let resource = await this.dataContext.resourceManager.getResource(song.audioStreamResourceId);
+            this.dataContext.logger.logDebug(
+                `[Player]: Audio resource loaded. Resource Name: ${resource.resourceName}`);
+            if (resource.resourceType === ResourceType.Url) {
+                audioSource.src = resource.resourceBody;
+            }
+            else if (resource.resourceType === ResourceType.Blob) {
+                let blob = resource.getBlob().blobData;
+                this.dataContext.logger.logDebug(
+                    `[Player]: Blob type "${blob.type}" of resource "${resource.resourceName}" will be loaded. Size: ${blob.size}`);
+                let url = URL.createObjectURL(blob);
+                this.dataContext.logger.logDebug(
+                    `[Player]: Blob url generated at ${url}`);
+                audioSource.src = url;
+                audioSource.type = blob.type;
+            }
+            audio.load();
             await audio.play();
         }
     }

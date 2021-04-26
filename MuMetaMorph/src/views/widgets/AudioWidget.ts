@@ -2,17 +2,24 @@
 
 //Represents the audio widget.
 export class AudioWidget extends Widget {
-    private _src: string = "";
     private audio: HTMLMediaElement;
     public get src(): string {
-        return this._src;
+        return this.audio.src;
+    }
+    public get srcObject(): any {
+        return this.audio.srcObject;
     }
     public set src(value: string) {
-        this._src = value;
-        this.audio.src = this._src;
+        this.audio.src = value;
+    }
+    public set srcObject(value: any) {
+        this.audio.srcObject = value;
     }
     async play(): Promise<void> {
         await this.audio.play();
+    }
+    load(): void {
+        this.audio.load();
     }
     constructor() {
         super();

@@ -1,5 +1,5 @@
 ﻿import { HtmlWidget } from "../../views/widgets/HtmlWidget";
-import { IFormBuilder } from "./IFormBuilder";
+import { IFormBuilder, SelectOption } from "./IFormBuilder";
 
 export class HtmlWidgetFormBuilder implements IFormBuilder {
     constructor(private form: HtmlWidget, private appendChild: boolean = false) {
@@ -39,6 +39,35 @@ export class HtmlWidgetFormBuilder implements IFormBuilder {
         if (elementBuilder != null) elementBuilder(input);
         return this;
     }
+    addSelect(label: string,
+        inputId: string,
+        required: boolean,
+        options: SelectOption[],
+        elementBuilder?: (element: HTMLSelectElement) => void): IFormBuilder {
+        let row = this.form.createElement("div", div => div.classList.add("row"), this.appendChild);
+        let select: HTMLSelectElement;
+        row.createElement("div", div => div.classList.add("col-25"))
+            .createElementAndAppend("label", element => {
+                let labelElement = element as HTMLLabelElement;
+                labelElement.textContent = label;
+                labelElement.htmlFor = inputId;
+            });
+        row.createElement("div", div => div.classList.add("col-75"))
+            .createElementAndAppend("select", element => {
+                select = element as HTMLSelectElement;
+                element.classList.add("input-search");
+                select.required = required;
+                select.id = inputId;
+                for (let option of options) {
+                    let optionElement: HTMLOptionElement = document.createElement("option");
+                    optionElement.value = option.value;
+                    optionElement.textContent = option.text;
+                    select.options.add(optionElement);
+                }
+            });
+        if (elementBuilder != null) elementBuilder(select);
+        return this;
+    }
     addResourceInput(label: string,
         inputId: string,
         required: boolean,
@@ -56,13 +85,14 @@ export class HtmlWidgetFormBuilder implements IFormBuilder {
             .createElementAndAppend("button", button => {
                 button.classList.add("btn");
                 button.textContent = "Browse";
-                button.addEventListener("click", () => browseButtonClicked(input));
+                button.addEventListener("click", (evt) => {
+                    evt.preventDefault();
+                    browseButtonClicked(input);
+                });
             })
             .createElementAndAppend("input", element => {
                 input = element as HTMLInputElement;
-                element.classList.add("input-search");
-                input.type = "url";
-                input.required = required;
+                input.disabled = true;
                 input.id = inputId;
             });
         if (elementBuilder != null) elementBuilder(input);

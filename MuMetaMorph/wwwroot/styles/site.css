@@ -7,11 +7,49 @@
     margin-top: 49px;
     overflow-y: auto;
     padding-bottom: 50px;
+    font-family: Arial;
+}
+
+.main-banner {
+    display: flex;
+    background-color: #06acaf;
+    color: white;
+    opacity: 0.75;
+    width: 100%;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-center {
+    text-align: center;
 }
 .main-musicDetails {
     overflow-y: auto;
     margin-top: 39px;
     padding-bottom: 50px;
+}
+.main-home {
+    margin-top: 39px;
+    margin-left: 0;
+    margin-right: 0;
+}
+.main-home-body {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-column-gap: 5px;
+}
+@media screen and (max-width: 604px) {
+    .main-home-body {
+        display: flex;
+        flex-direction: column;
+    }
+}
+.main-home-body-grid-item {
+    grid-row: 1;
 }
 nav {
     background-color: blue;
@@ -41,8 +79,16 @@ nav ul li a {
     padding-top: 60px;
 }
 
+/* Emulate Windows group-box */
+.group-box {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
 .player {
     background-color: white;
+    opacity: 0.75;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -54,13 +100,44 @@ nav ul li a {
     display: table;
     margin: 0 auto;
 }
+
+/* https://www.w3schools.com/css/css_table.asp */
 table {
-    border: 1px lightblue solid;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 75%;
 }
+
+table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/*May remove later.*/
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    background-color: #ddd;
+}
+
+.table-list {
+    list-style: none;
+    padding: 2px;
+}
+
 table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
     background-color: black;
     color: white;
 }
+.main-home-body table {
+    width: 100%;
+}
+
 .invisible {
     display: none;
 }
@@ -71,18 +148,33 @@ table th {
     color: white;
     border: 0;
     padding: 10px;
+    margin-bottom: 5px;
     border-radius: 3px;
+}
+.btn:disabled {
+    background-color: lightgrey;
 }
 .btn-submit {
     padding: 12px 20px;
 }
-.btn:hover {
+.btn:hover:enabled {
     background-color: #252592;
 }
 
 .btn:focus {
     background-color: darkblue;
 }
+.player .btn {
+    margin-bottom: 0;
+    margin-left: 5px;
+}
+.btn-group-horizontal {
+    flex-direction: row;
+}
+.btn-group-horizontal > .btn {
+    margin: 5px;
+}
+
 /* https://www.w3schools.com/css/css_form.asp */
 
 input {
@@ -119,6 +211,11 @@ label {
 .form-center {
     margin: 0 auto;
     width: 50%;
+}
+@media screen and (max-width: 900px) {
+    .form-center {
+        width: 100%;
+    }
 }
 .form-container {
     border-radius: 5px;
@@ -216,6 +313,13 @@ label {
     grid-row-gap: 10px;
 }
 
+@media screen and (max-width: 610px) {
+    .card-grid {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 /*Image styles*/
 .music-banner {
     width: 100%;
@@ -233,7 +337,7 @@ label {
 }
 .banner-controls {
     padding: 10px;
-    height: 100px;
+    height: 120px;
 }
 .banner-controls h1 {
     padding-left: 10px;
@@ -251,6 +355,7 @@ label {
 .admon-warning {
     background-color: yellow;
     padding: 10px;
+    margin-bottom: 5px;
 }
 
 /* https://www.w3schools.com/howto/howto_js_vertical_tabs.asp */
@@ -262,6 +367,17 @@ label {
     width: 15%;
     height: 100%;
 }
+@media screen and (max-width: 945px) {
+    #browseResourceModalBody {
+        flex-direction: column;
+    }
+    #browseResourceMenuDiv {
+        width: 100%;
+    }
+}
+#browseResourceModalFooter > .btn {
+    margin: 5px;
+} 
 
 /* Style the buttons that are used to open the tab content */
 .tab button {
@@ -302,11 +418,11 @@ label {
     #musicDetailsBody {
         flex-direction: column;
     }
-    .tabcontent {
-        width: 100%;
+    #musicDetailsBody > .tabcontent {
+            width: 100%;
     }
-    .tab {
-        width: 100%;
+    #musicDetailsBody > .tab {
+            width: 100%;
     }
 }
 
@@ -403,4 +519,36 @@ label {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Widget styles */
+.widget-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 10px;
+}
+.widget-grid-half {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 10px;
+}
+.widget-grid-one {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 10px;
+}
+.widget-grid-item {
+    background-color: lightgrey;
+    /* ReSharper disable once CssNotResolved */
+    aspect-ratio: 1;
+}
+.widget-fill-zone {
+    display: flex;
+    flex-direction: column;
+}
+.widget-fill-zone-item {
+    width: 100%;
 }

@@ -12,16 +12,11 @@ const application = new DefaultApplication()
     .useDatabase(null)
     .addConfigurationManager(null)
     .addSongManager(null)
-    .addBlobResourceManager(null)
+    .addResourceManager(null)
     .configureContainer((extensions) => {
         extensions.addThemeManager();
         addViewModels();
         extensions.addPlugin(new TestPlugin("TestPlugin"));
-        extensions.addPlugin(new TestPlugin("Kitty", "Kitty Plugin"));
-        extensions.addPlugin(new TestPlugin("MusicForNerds", "Music for Nerds"));
-        extensions.addPlugin(new TestPlugin("MuseScore", "MuseScore"));
-        extensions.addPlugin(new TestPlugin("Metronome", "Metronome"));
-        extensions.addPlugin(new TestPlugin("RandomStuff", "Random Stuff"));
         extensions.addPlugin(new HtmlPlugin());
     });
 

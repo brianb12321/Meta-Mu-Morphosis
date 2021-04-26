@@ -1,4 +1,5 @@
-﻿import { PluginBase } from "./PluginBase";
+﻿import { HtmlWidget } from "../../views/widgets/HtmlWidget";
+import { PluginBase } from "./PluginBase";
 
 /**
  * Base interface for any component registered to PluginBase.

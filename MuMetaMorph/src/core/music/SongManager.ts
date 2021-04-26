@@ -41,9 +41,10 @@ export class SongManager implements ISongManager {
         let jsonObject = JSON.parse(jsonText);
         let song: ISong = {
             name: jsonObject.name,
+            artist: jsonObject.artist,
             dateAdded: new Date(Date.now()),
             bannerImageUrl: jsonObject.bannerImageUrl,
-            audioStreamUrl: jsonObject.audioStreamUrl,
+            audioStreamResourceId: jsonObject.audioStreamResourceId,
             pluginsUsed: jsonObject.pluginsUsed,
             additionalMetadata: jsonObject.additionalMetadata
         };
