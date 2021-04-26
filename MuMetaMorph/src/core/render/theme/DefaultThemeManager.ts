@@ -5,6 +5,7 @@ import { ILogger } from "../../logging/ILogger";
 import { ITheme } from "./ITheme";
 import { IThemeConfiguration } from "./IThemeConfiguration";
 import { IThemeManager } from "./IThemeManager";
+import { defaultStyleSheet, defaultStyleSheetRootDir } from "../../../defaults";
 
 @injectable()
 export class DefaultThemeManager implements IThemeManager {
@@ -19,12 +20,12 @@ export class DefaultThemeManager implements IThemeManager {
         if (!await this.configManager.configurationExists(this.THEME_CONFIG_NAME)) {
             this.logger.log("[Theme Manager]: Theme configuration object does not exist.");
             let configObject: IThemeConfiguration = {
-                StylesheetRootDir: "styles",
+                StylesheetRootDir: defaultStyleSheetRootDir,
                 DefaultThemeName: "AquaBlue",
                 Themes: [
                     {
                         Name: "AquaBlue",
-                        Stylesheet: "site.css"
+                        Stylesheet: defaultStyleSheet
                     }
                 ]
             };
