@@ -15,6 +15,7 @@ export class AddNewSongView extends View<AddNewSongViewModel> {
     constructor(private viewNavigator: IViewNavigator) {
         super();
         this.dataContext = getAddNewSongViewModel();
+        this.dataContext.title = "Add New Song";
         this.dataContext.formData.main = {};
         let mainElement = document.createElement("main");
         mainElement.classList.add("main");
