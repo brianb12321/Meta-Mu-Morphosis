@@ -28,3 +28,5 @@ $ dotnet run
 If you are running VSCode live server, please update your `Settings.json` webserver root path to the `wwwroot` directory.
 ## Theme not loading
 If the default theme is not loading, please edit the global default theme variables in `src/defaults.ts` for your specific webserver and delete the database.
+## Demo Site
+A demo site with default plugins can be found at https://mumetamorph.azurewebsites.net

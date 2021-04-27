@@ -11,7 +11,7 @@ export class MMMConfigurationDatabase extends Dexie {
     constructor(private logger: ILogger) {
         super("MMConfigurationDatabase");
         this.logger.log("Configuring the database...");
-        this.version(1).stores({
+        this.version(2).stores({
             configuration: "++Id, &Name, Value",
             song: "++songId, name, listImageUrl, bannerImageUrl, dateReleased, audioStreamUrl, additionalMetadata",
             resource: "++resourceId, resourceName, resourceType, resourceBody"
