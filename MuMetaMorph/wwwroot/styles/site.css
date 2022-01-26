@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
 }
+
 .main {
     margin: 10px;
     margin-top: 49px;
@@ -25,16 +26,19 @@
 .text-center {
     text-align: center;
 }
+
 .main-musicDetails {
     overflow-y: auto;
     margin-top: 39px;
     padding-bottom: 50px;
 }
+
 .main-home {
     margin-top: 39px;
     margin-left: 0;
     margin-right: 0;
 }
+
 .main-home-body {
     margin-left: 10px;
     margin-right: 10px;
@@ -42,15 +46,18 @@
     grid-auto-columns: 1fr;
     grid-column-gap: 5px;
 }
+
 @media screen and (max-width: 604px) {
     .main-home-body {
         display: flex;
         flex-direction: column;
     }
 }
+
 .main-home-body-grid-item {
     grid-row: 1;
 }
+
 nav {
     background-color: blue;
     overflow: hidden;
@@ -59,21 +66,25 @@ nav {
     opacity: 0.75;
     width: 100%;
 }
-nav ul {
-    display: flex;
-    flex-direction: row;
-}
-nav ul li {
-    color: white;
-    list-style: none;
-    padding: 10px;
-}
-nav ul li:hover {
-    background-color: rgb(0, 0, 100);
-}
-nav ul li a {
-    cursor: pointer;
-}
+
+    nav ul {
+        display: flex;
+        flex-direction: row;
+    }
+
+        nav ul li {
+            color: white;
+            list-style: none;
+            padding: 10px;
+        }
+
+            nav ul li:hover {
+                background-color: rgb(0, 0, 100);
+            }
+
+            nav ul li a {
+                cursor: pointer;
+            }
 
 .sticky + .content {
     padding-top: 60px;
@@ -96,10 +107,11 @@ nav ul li a {
     padding-top: 5px;
     padding-bottom: 5px;
 }
-.player audio {
-    display: table;
-    margin: 0 auto;
-}
+
+    .player audio {
+        display: table;
+        margin: 0 auto;
+    }
 
 /* https://www.w3schools.com/css/css_table.asp */
 table {
@@ -108,19 +120,19 @@ table {
     width: 75%;
 }
 
-table td, table th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
+    table td, table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-/*May remove later.*/
-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    /*May remove later.*/
+    table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-table tr:hover {
-    background-color: #ddd;
-}
+    table tr:hover {
+        background-color: #ddd;
+    }
 
 .table-list {
     list-style: none;
@@ -134,6 +146,7 @@ table th {
     background-color: black;
     color: white;
 }
+
 .main-home-body table {
     width: 100%;
 }
@@ -141,6 +154,7 @@ table th {
 .invisible {
     display: none;
 }
+
 .btn {
     background-color: blue;
     text-decoration: none;
@@ -151,12 +165,15 @@ table th {
     margin-bottom: 5px;
     border-radius: 3px;
 }
-.btn:disabled {
-    background-color: lightgrey;
-}
+
+    .btn:disabled {
+        background-color: lightgrey;
+    }
+
 .btn-submit {
     padding: 12px 20px;
 }
+
 .btn:hover:enabled {
     background-color: #252592;
 }
@@ -164,32 +181,37 @@ table th {
 .btn:focus {
     background-color: darkblue;
 }
+
 .player .btn {
     margin-bottom: 0;
     margin-left: 5px;
 }
+
 .btn-group-horizontal {
     flex-direction: row;
 }
-.btn-group-horizontal > .btn {
-    margin: 5px;
-}
+
+    .btn-group-horizontal > .btn {
+        margin: 5px;
+    }
 
 /* https://www.w3schools.com/css/css_form.asp */
 
 input {
     width: 100%;
 }
-input[type=text],
+
+    input[type=text],
     input[type=date],
-    input[type=url], 
+    input[type=url],
     select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-}
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+
 textarea {
     width: 100%;
     height: 150px;
@@ -200,9 +222,11 @@ textarea {
     background-color: #f8f8f8;
     resize: none;
 }
+
 input:invalid {
     border: 2px solid red;
 }
+
 label {
     padding: 12px 12px 12px 0;
     display: inline-block;
@@ -212,11 +236,13 @@ label {
     margin: 0 auto;
     width: 50%;
 }
+
 @media screen and (max-width: 900px) {
     .form-center {
         width: 100%;
     }
 }
+
 .form-container {
     border-radius: 5px;
     background-color: #f2f2f2;
@@ -250,6 +276,7 @@ label {
         width: 100%;
         margin-top: 0;
     }
+
     form {
         margin: unset;
         width: 100%;
@@ -269,10 +296,10 @@ label {
     transition: 0.4s;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .accordion:hover {
-    background-color: #ccc;
-}
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .accordion:hover {
+        background-color: #ccc;
+    }
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
@@ -291,12 +318,12 @@ label {
     transition: 0.3s;
 }
 
-/* On mouse-over, add a deeper shadow */
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    background-color: darkgray;
-    cursor: pointer;
-}
+    /* On mouse-over, add a deeper shadow */
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        background-color: darkgray;
+        cursor: pointer;
+    }
 
 /* Add some padding inside the card container */
 .card-container {
@@ -329,27 +356,33 @@ label {
     flex-direction: column;
     background-color: lightgrey;
 }
+
 .music-banner-image-div {
     overflow-y: auto;
 }
+
 .banner-image {
     width: 100%;
 }
+
 .banner-controls {
     padding: 10px;
     height: 120px;
 }
-.banner-controls h1 {
-    padding-left: 10px;
-}
+
+    .banner-controls h1 {
+        padding-left: 10px;
+    }
+
 .banner-controls-list {
     display: flex;
 }
-.banner-controls-list a {
-    cursor: pointer;
-    color: blue;
-    padding: 10px;
-}
+
+    .banner-controls-list a {
+        cursor: pointer;
+        color: blue;
+        padding: 10px;
+    }
 
 /* Admonitions */
 .admon-warning {
@@ -367,17 +400,20 @@ label {
     width: 15%;
     height: 100%;
 }
+
 @media screen and (max-width: 945px) {
     #browseResourceModalBody {
         flex-direction: column;
     }
+
     #browseResourceMenuDiv {
         width: 100%;
     }
 }
+
 #browseResourceModalFooter > .btn {
     margin: 5px;
-} 
+}
 
 /* Style the buttons that are used to open the tab content */
 .tab button {
@@ -393,15 +429,15 @@ label {
     transition: 0.3s;
 }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
-}
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #ddd;
+    }
 
-/* Create an active/current "tab button" class */
-.tab button.active {
-    background-color: #ccc;
-}
+    /* Create an active/current "tab button" class */
+    .tab button.active {
+        background-color: #ccc;
+    }
 
 /* Style the tab content */
 .tabcontent {
@@ -411,19 +447,23 @@ label {
     border-left: none;
     overflow-y: hidden;
 }
+
 #musicDetailsBody {
     display: flex;
 }
+
 @media screen and (max-width: 600px) {
     #musicDetailsBody {
         flex-direction: column;
     }
-    #musicDetailsBody > .tabcontent {
+
+        #musicDetailsBody > .tabcontent {
             width: 100%;
-    }
-    #musicDetailsBody > .tab {
+        }
+
+        #musicDetailsBody > .tab {
             width: 100%;
-    }
+        }
 }
 
 /* https://www.w3schools.com/howto/howto_js_tabs.asp */
@@ -433,26 +473,26 @@ label {
     border: 1px solid #ccc;
     background-color: #f1f1f1;
 }
-/* Style the buttons that are used to open the tab content */
-.tab-horizontal button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-}
+    /* Style the buttons that are used to open the tab content */
+    .tab-horizontal button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+    }
 
-/* Change background color of buttons on hover */
-.tab-horizontal button:hover {
-    background-color: #ddd;
-}
+        /* Change background color of buttons on hover */
+        .tab-horizontal button:hover {
+            background-color: #ddd;
+        }
 
-/* Create an active/current tablink class */
-.tab-horizontal button.active {
-    background-color: #ccc;
-}
+        /* Create an active/current tablink class */
+        .tab-horizontal button.active {
+            background-color: #ccc;
+        }
 
 /* Style the tab content */
 .tabcontent-horizontal {
@@ -488,6 +528,7 @@ label {
     animation-name: animatetop;
     animation-duration: 0.4s
 }
+
 @keyframes animatetop {
     from {
         top: -300px;
@@ -514,12 +555,12 @@ label {
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
 /* Widget styles */
 .widget-grid {
@@ -528,27 +569,32 @@ label {
     grid-column-gap: 5px;
     grid-row-gap: 10px;
 }
+
 .widget-grid-half {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 5px;
     grid-row-gap: 10px;
 }
+
 .widget-grid-one {
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 5px;
     grid-row-gap: 10px;
 }
+
 .widget-grid-item {
     background-color: lightgrey;
     /* ReSharper disable once CssNotResolved */
     aspect-ratio: 1;
 }
+
 .widget-fill-zone {
     display: flex;
     flex-direction: column;
 }
+
 .widget-fill-zone-item {
     width: 100%;
 }

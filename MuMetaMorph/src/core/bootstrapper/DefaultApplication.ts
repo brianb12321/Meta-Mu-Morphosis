@@ -18,6 +18,12 @@ import { IResourceManager } from "../resourceSystem/IResourceManager";
 
 @injectable()
 export class DefaultApplication implements IApplication {
+    public get MajorVersion(): number {
+        return 2;
+    }
+    public get MinorVersion(): number {
+        return 0;
+    }
     private logger: ILogger;
     private configurationManager: IConfigurationManager;
     private resourceManager: IResourceManager;
@@ -44,7 +50,7 @@ export class DefaultApplication implements IApplication {
         if (databaseBuilder != null) {
             this.database = databaseBuilder();
         } else {
-            this.database = new MMMConfigurationDatabase(this.logger);
+            this.database = new MMMConfigurationDatabase(this.logger, this);
         }
         return this;
     }

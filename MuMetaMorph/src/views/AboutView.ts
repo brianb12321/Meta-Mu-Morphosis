@@ -56,7 +56,7 @@ export class AboutView extends View<AboutViewModel> {
 <h2>Why aren't you using JQuery?</h2>
 <p>The HTML DOM isn't terribly hard to manipulate natively. Most DOM manipulations are abstracted away anyways through the HtmlWidget.</p>
 <h2>I clicked on a button, but nothing happened.</h2>
-<p>First, make sure your now dreaming. Second, check the debug console and report it to the GitHub issue tracker.</p>
+<p>First, make sure your not dreaming. Second, check the debug console and report it to the GitHub issue tracker.</p>
 <h2>What is the license?</h2>
 <p>GPLv3</p>
 `;

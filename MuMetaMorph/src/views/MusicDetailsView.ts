@@ -76,11 +76,12 @@ export class MusicDetailsView extends View<MusicDetailsViewModel> {
         }
         let deleteLink = document.createElement("a");
         deleteLink.textContent = "Delete Song";
-        deleteLink.addEventListener("click", () => {
-            if (confirm("Are you sure you want to delete this song?")) {
-                this.dataContext.deleteSong().then(() => this.moveHome());
-            }
-        })
+        deleteLink.addEventListener("click",
+            () => {
+                if (confirm("Are you sure you want to delete this song?")) {
+                    this.dataContext.deleteSong().then(() => this.moveHome());
+                }
+            });
         bannerControlList.appendChild(deleteLink);
         let exportLink = document.createElement("a");
         exportLink.textContent = "Export To JSON";
