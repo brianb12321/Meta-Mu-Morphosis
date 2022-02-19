@@ -6,7 +6,8 @@ MuMetaMorph is a fully client-side music and playlist manager.
 * Morph - MMM is an evolving program. It is fully modular with its bundling and packaging architecture. Based off the suckless methodology, MMM uses Webpack to package all core functionality and plugins into one easy-to-manage Javascript file.
 
 # Images
-![Home Page]()
+![Home Page](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/HomePage.PNG)
+![About Page](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/AboutPage.PNG)
 
 ## Building
 If you modified MMM or wish to manually build, follow the following steps:
