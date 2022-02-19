@@ -4,6 +4,10 @@ MuMetaMorph is a fully client-side music and playlist manager.
 * Mu - A play-on-word for music.
 * Meta - All your music is self-contained and self-describing. MMM is a comprehensive database for any music knowledge you so choose to store.
 * Morph - MMM is an evolving program. It is fully modular with its bundling and packaging architecture. Based off the suckless methodology, MMM uses Webpack to package all core functionality and plugins into one easy-to-manage Javascript file.
+
+# Images
+![Home Page]()
+
 ## Building
 If you modified MMM or wish to manually build, follow the following steps:
 1. Change to `package.json` directory.
