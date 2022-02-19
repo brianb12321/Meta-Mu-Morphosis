@@ -1,4 +1,8 @@
 # MuMetaMorph
+[![Firebase Web Application](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)](https://mu-meta-morph.web.app/)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
 MuMetaMorph is a fully client-side music and playlist manager.
 ## Where did you get its name?
 * Mu - A play-on-word for music.
@@ -6,6 +10,12 @@ MuMetaMorph is a fully client-side music and playlist manager.
 * Morph - MMM is an evolving program. It is fully modular with its bundling and packaging architecture. Based off the suckless methodology, MMM uses Webpack to package all core functionality and plugins into one easy-to-manage Javascript file.
 
 # Images
+> **NOTE**: All images and music are royalty free
+
+![Song Page](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/SongPage.PNG)
+![Song Playing](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/SongPlaying.PNG)
+![Create Song](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/AddSong.PNG)
+![Upload Song](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/UploadMusic.PNG)
 ![Home Page](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/HomePage.PNG)
 ![About Page](https://github.com/brianb12321/MuMetaMorph/raw/master/Images/AboutPage.PNG)
 
